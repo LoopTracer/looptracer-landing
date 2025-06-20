@@ -1,63 +1,1226 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoopTracer - Automatiza tu contabilidad</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoopTracer - Automatiza tu contabilidad en segundos</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --primary-light: #4D94FF;
+            --secondary: #F0F4FF;
+            --accent: #00D9FF;
+            --success: #00C851;
+            --warning: #FF6B35;
+            --text-primary: #0A0A0A;
+            --text-secondary: #4A5568;
+            --text-light: #718096;
+            --bg-white: #FFFFFF;
+            --bg-gray: #F7FAFC;
+            --bg-dark: #1A202C;
+            --border: #E2E8F0;
+            --shadow: 0 4px 25px rgba(0, 102, 255, 0.1);
+            --shadow-lg: 0 20px 60px rgba(0, 102, 255, 0.15);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-primary: linear-gradient(135deg, #0066FF 0%, #4D94FF 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-cta {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--bg-white) 0%, var(--secondary) 100%);
+            padding: 8rem 2rem 6rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M 40 0 L 0 0 0 40" fill="none" stroke="%23E2E8F0" stroke-width="1" opacity="0.3"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+        }
+
+        .hero-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero h2 {
+            font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 3rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 70px rgba(0, 102, 255, 0.2);
+        }
+
+        .trust-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .trust-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .trust-badge i {
+            color: var(--success);
+        }
+
+        /* Benefits Section */
+        .benefits {
+            padding: 6rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-card {
+            background: var(--bg-white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .benefit-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .benefit-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .benefit-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .benefit-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .benefit-metric {
+            display: inline-block;
+            background: var(--secondary);
+            color: var(--primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        /* Demo Section */
+        .demo {
+            padding: 6rem 2rem;
+            background: var(--bg-gray);
+            text-align: center;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            margin-bottom: 3rem;
+        }
+
+        .demo-timer {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--warning);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* How it Works */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .step-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 2rem;
+            background: var(--bg-gray);
+        }
+
+        .pricing-card {
+            max-width: 500px;
+            margin: 3rem auto 0;
+            background: var(--bg-white);
+            padding: 3rem;
+            border-radius: 25px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+            border: 2px solid var(--primary);
+            position: relative;
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .price-main {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            vertical-align: top;
+        }
+
+        .price-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .price-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .price-features i {
+            color: var(--success);
+        }
+
+        .roi-note {
+            background: var(--secondary);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* Guarantee */
+        .guarantee {
+            padding: 4rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .guarantee-container {
+            max-width: 800px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .guarantee-card {
+            background: linear-gradient(135deg, var(--success), #00B946);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .scarcity-card {
+            background: linear-gradient(135deg, var(--warning), #FF5722);
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .guarantee-icon, .scarcity-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .guarantee-title, .scarcity-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 25px;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--accent);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+        }
+
+        /* Social Proof */
+        .social-proof {
+            padding: 4rem 2rem;
+            background: var(--bg-gray);
+            text-align: center;
+        }
+
+        .testimonial {
+            max-width: 600px;
+            margin: 2rem auto;
+            background: var(--bg-white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .testimonial::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 4rem;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 6rem 2rem;
+            background: var(--bg-white);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 3rem auto 0;
+        }
+
+        .faq-item {
+            background: var(--bg-gray);
+            margin-bottom: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: var(--secondary);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 200px;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 2rem 1rem;
+            background: var(--bg-dark);
+            color: white;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .hero {
+                padding: 6rem 1rem 4rem;
+            }
+            
+            .benefits, .demo, .how-it-works, .pricing, .cta-section, .faq {
+                padding: 4rem 1rem;
+            }
+            
+            .benefits-grid, .steps-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .guarantee-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .trust-badges {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Scroll animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body>
-  <header class="hero">
-    <h1>¿Cuántas horas facturables pierdes copiando datos de facturas?</h1>
-    <h2>Convierte PDFs, Excel y emails en contabilidad lista para presentar… sin tocar un teclado.</h2>
-    <a href="#cta" class="btn">Quiero Ahorrar +10 h/mes</a>
-  </header>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">🔄 LoopTracer</a>
+            <a href="#cta" class="nav-cta">
+                <i class="fas fa-calendar-alt"></i>
+                Agendar Demo
+            </a>
+        </div>
+    </nav>
 
-  <section class="benefits">
-    <ul>
-      <li>✔️ 10 h/mes liberadas → +600 h/año si sois 5 gestores</li>
-      <li>✔️ 0 errores manuales → menos sustos con Hacienda</li>
-      <li>✔️ Informes automáticos listos cada lunes a las 8 am</li>
-    </ul>
-  </section>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>¿Cuántas horas facturables pierdes copiando datos?</h1>
+            <h2>Convierte PDFs, Excel y emails en contabilidad lista para presentar… sin tocar un teclado. Automatización completa en 72 horas.</h2>
+            <a href="#cta" class="hero-cta">
+                <i class="fas fa-rocket"></i>
+                Quiero Ahorrar +10 h/mes
+            </a>
+            <div class="trust-badges">
+                <div class="trust-badge">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>100% Seguro</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-clock"></i>
+                    <span>Listo en 72h</span>
+                </div>
+                <div class="trust-badge">
+                    <i class="fas fa-money-back"></i>
+                    <span>Garantía 30 días</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section class="demo">
-    <p>Mira cómo un PDF entra y un Excel listo sale… en <strong>12 segundos</strong></p>
-    <iframe src="https://www.loom.com/embed/tu_video" frameborder="0" allowfullscreen></iframe>
-  </section>
+    <!-- Benefits Section -->
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Transforma tu despacho en una máquina de eficiencia</h2>
+                <p class="section-subtitle">Deja que la IA maneje toda la contabilidad rutinaria mientras tú te enfocas en lo que realmente importa: crecer tu negocio</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="benefit-title">Libera 600+ horas al año</h3>
+                    <p class="benefit-description">Si tienes 5 gestores, cada uno ahorra 10 horas/mes. Eso son 600 horas anuales que puedes facturar o invertir en nuevos clientes.</p>
+                    <span class="benefit-metric">+€30,000 en facturación recuperada</span>
+                </div>
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <h3 class="benefit-title">Cero errores manuales</h3>
+                    <p class="benefit-description">Elimina por completo los errores de transcripción. Menos sustos con Hacienda, menos rectificativas, más tranquilidad.</p>
+                    <span class="benefit-metric">100% precisión garantizada</span>
+                </div>
+                <div class="benefit-card animate-on-scroll">
+                    <div class="benefit-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="benefit-title">Informes automáticos</h3>
+                    <p class="benefit-description">Cada lunes a las 8 AM tienes todos los informes listos: Excel organizado, resúmenes ejecutivos y datos preparados para SII/IVA.</p>
+                    <span class="benefit-metric">Reporting instantáneo</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section class="how">
-    <h3>¿Cómo funciona?</h3>
-    <ol>
-      <li>1️⃣ Enlazas tu carpeta de facturas y tu correo</li>
-      <li>2️⃣ Mi asistente IA lee, extrae y valida los datos</li>
-      <li>3️⃣ Recibes el Excel mensual + informe resumen → listo para SII/IVA</li>
-    </ol>
-  </section>
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="demo-container">
+            <div class="demo-header animate-on-scroll">
+                <div class="demo-timer">
+                    <i class="fas fa-stopwatch"></i>
+                    ⏱️ 12 segundos
+                </div>
+                <h2 class="section-title">Mira cómo un PDF se convierte en Excel listo</h2>
+                <p class="section-subtitle">La magia sucede en segundos. Un documento entra, contabilidad perfecta sale.</p>
+            </div>
+            <div class="video-wrapper animate-on-scroll">
+                <!-- Reemplaza con tu video real de Loom -->
+                <iframe src="https://www.loom.com/embed/tu_video_real" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
 
-  <section class="price">
-    <h3>Setup único 800 € (+IVA) · Listo en 72 h</h3>
-    <p>Mantenimiento opcional 100 €/mes (hosting, soporte y mejora continua)</p>
-    <small>El 80 % de nuestros clientes recupera la inversión en &lt; 30 días</small>
-  </section>
+    <!-- How it Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">¿Cómo funciona la magia?</h2>
+                <p class="section-subtitle">Tres pasos simples para transformar tu flujo de trabajo contable</p>
+            </div>
+            <div class="steps-container">
+                <div class="step animate-on-scroll">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Conecta tus fuentes</h3>
+                    <p class="step-description">Enlazas tu carpeta de facturas, correo electrónico y sistema contable existente. Todo en 5 minutos.</p>
+                </div>
+                <div class="step animate-on-scroll">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">IA procesa automáticamente</h3>
+                    <p class="step-description">Nuestro asistente de IA lee, extrae, valida y organiza todos los datos financieros sin intervención humana.</p>
+                </div>
+                <div class="step animate-on-scroll">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Recibe informes listos</h3>
+                    <p class="step-description">Excel organizado + informes ejecutivos + datos listos para SII/IVA. Todo perfectamente categorizado.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section class="guarantee">
-    <p><strong>Garantía:</strong> Si en 30 días no te ahorra al menos 5 h, devuelvo tu dinero</p>
-    <p><strong>Plazas limitadas:</strong> Solo 2 nuevos despachos al mes (soporte premium)</p>
-  </section>
+    <!-- Pricing -->
+    <section class="pricing">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Inversión que se paga sola</h2>
+                <p class="section-subtitle">Una configuración única que transforma tu despacho para siempre</p>
+            </div>
+            <div class="pricing-card animate-on-scroll">
+                <div class="pricing-badge">🚀 Más Popular</div>
+                <div class="price-main">
+                    <span class="price-currency">€</span>800
+                </div>
+                <p class="price-description">Setup único (+IVA) · Listo en 72 horas</p>
+                <ul class="price-features">
+                    <li><i class="fas fa-check"></i> Configuración personalizada completa</li>
+                    <li><i class="fas fa-check"></i> Integración con tu software actual</li>
+                    <li><i class="fas fa-check"></i> Formación del equipo incluida</li>
+                    <li><i class="fas fa-check"></i> Soporte prioritario 30 días</li>
+                    <li><i class="fas fa-check"></i> Garantía 100% satisfacción</li>
+                </ul>
+                <div style="margin: 2rem 0; padding: 1rem; background: var(--secondary); border-radius: 10px;">
+                    <strong>Mantenimiento opcional:</strong> €100/mes<br>
+                    <small>(hosting, soporte continuo y mejoras)</small>
+                </div>
+                <a href="#cta" class="hero-cta" style="width: 100%; justify-content: center; margin-top: 1rem;">
+                    <i class="fas fa-calendar-check"></i>
+                    Agendar Demo Gratuita
+                </a>
+                <div class="roi-note">
+                    <i class="fas fa-chart-line"></i>
+                    <strong>El 80% de nuestros clientes recupera la inversión en menos de 30 días</strong>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <section id="cta">
-    <h3>Agenda 15 min gratuitos</h3>
-    <form method="POST" action="https://TU_WEBHOOK_DE_N8N.com">
-      <input type="text" name="nombre" placeholder="Nombre" required />
-      <input type="email" name="email" placeholder="Email" required />
-      <input type="tel" name="telefono" placeholder="Teléfono" />
-      <button type="submit">Enviar</button>
-    </form>
-  </section>
+    <!-- Guarantee Section -->
+    <section class="guarantee">
+        <div class="container">
+            <div class="guarantee-container">
+                <div class="guarantee-card animate-on-scroll">
+                    <div class="guarantee-icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h3 class="guarantee-title">Garantía de Ahorro</h3>
+                    <p>Si en 30 días no te ahorra al menos 5 horas semanales, te devolvemos el 100% de tu dinero. Sin preguntas.</p>
+                </div>
+                <div class="scarcity-card animate-on-scroll">
+                    <div class="scarcity-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="scarcity-title">Plazas Limitadas</h3>
+                    <p>Solo 2 nuevos despachos al mes para garantizar soporte premium y atención personalizada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <footer>
-    <p>© LoopTracer · Política de privacidad · Cookies</p>
-  </footer>
+    <!-- CTA Section -->
+    <section class="cta-section" id="cta">
+        <div class="cta-container">
+            <div class="animate-on-scroll">
+                <h2 class="section-title">¿Listo para automatizar tu contabilidad?</h2>
+                <p class="section-subtitle">Agenda una demo de 15 minutos y descubre cómo LoopTracer puede transformar tu despacho</p>
+            </div>
+            <div class="cta-form animate-on-scroll">
+                <form method="POST" action="#" id="contact-form">
+                    <div class="form-group">
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email profesional</label>
+                        <input type="email" id="email" name="email" placeholder="tu@despacho.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono de contacto</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="despacho">Nombre del despacho</label>
+                        <input type="text" id="despacho" name="despacho" placeholder="Nombre de tu despacho">
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-calendar-plus"></i>
+                        Agendar Demo Gratuita (15 min)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            </div>
+            <div class="testimonial animate-on-scroll">
+                <p class="testimonial-text">
+                    "En abril redujimos 12 horas semanales de tareas administrativas. Ahora podemos atender 3 clientes más sin contratar personal adicional. La inversión se pagó en 3 semanas."
+                </p>
+                <div class="testimonial-author">
+                    — Sonia M., Gestora en Madrid
+                </div>
+            </div>
+            <div class="testimonial animate-on-scroll">
+                <p class="testimonial-text">
+                    "Lo que más me gusta es que no tuve que cambiar mi software contable. LoopTracer se adaptó perfectamente a nuestro flujo de trabajo existente."
+                </p>
+                <div class="testimonial-author">
+                    — Carlos R., Despacho Contable Barcelona
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq">
+        <div class="container">
+            <div class="section-header animate-on-scroll">
+                <h2 class="section-title">Preguntas frecuentes</h2>
+                <p class="section-subtitle">Resolvemos tus dudas más comunes</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question">
+                        ¿Tengo que cambiar mi software contable actual?
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>No, LoopTracer se adapta a tu software existente. Trabajamos con Sage, ContaPlus, A3CON, y prácticamente cualquier sistema contable del mercado.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question">
+                        ¿Qué ocurre con la seguridad de mis datos?
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Utilizamos encriptación AES-256 y servidores ubicados en la UE que cumplen con RGPD. Tus datos nunca salen de Europa y están más seguros que en un servidor local.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question">
+                        ¿Funciona con facturas electrónicas y tickets físicos?
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Sí, procesamos cualquier formato: PDFs, XMLs, facturas electrónicas, fotos de tickets, emails con adjuntos, y documentos escaneados.</p>
+                    </div>
+                </div>
+                <div class="faq-item animate-on-scroll">
+                    <button class="faq-question">
+                        ¿Es compatible con Mac y Windows?
+                        <i class="fas fa-plus faq-icon"></i>
+                    </button>
+                    <div class="faq-answer">
+                        <p>LoopTracer es 100% web, funciona desde cualquier navegador en Mac, Windows, Linux o incluso desde tu móvil. No necesitas instalar nada.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#privacy">Política de Privacidad</a>
+                <a href="#terms">Términos de Servicio</a>
+                <a href="#cookies">Cookies</a>
+                <a href="#contact">Contacto</a>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LoopTracer SL. Todos los derechos reservados.</p>
+                <p>CIF: B-12345678 · Registro Mercantil de Madrid</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('.faq-icon');
+                
+                // Close all other FAQs
+                document.querySelectorAll('.faq-answer').forEach(otherAnswer => {
+                    if (otherAnswer !== answer) {
+                        otherAnswer.classList.remove('active');
+                        otherAnswer.previousElementSibling.classList.remove('active');
+                    }
+                });
+                
+                // Toggle current FAQ
+                answer.classList.toggle('active');
+                question.classList.toggle('active');
+            });
+        });
+
+        // Form submission
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Here you would typically send the data to your backend
+            // For now, we'll just show a success message
+            alert('¡Gracias! Te contactaremos en las próximas 2 horas para agendar tu demo gratuita.');
+            
+            // Reset form
+            this.reset();
+            
+            // In a real implementation, you would send this data to your webhook:
+            // fetch('https://your-webhook-url.com', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(data)
+            // });
+        });
+
+        // Add loading animation to CTA buttons
+        document.querySelectorAll('.hero-cta, .nav-cta').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.getAttribute('href').startsWith('#')) {
+                    return; // Let anchor scroll work
+                }
+                
+                e.preventDefault();
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirigiendo...';
+                this.style.pointerEvents = 'none';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.style.pointerEvents = 'auto';
+                    // Here you would redirect to your actual booking system
+                    // window.location.href = 'https://calendly.com/your-link';
+                }, 1500);
+            });
+        });
+
+        // Add parallax effect to hero section
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+            }
+        });
+
+        // Add counter animation for metrics
+        function animateCounters() {
+            const counters = document.querySelectorAll('.benefit-metric');
+            counters.forEach(counter => {
+                if (counter.textContent.includes('600')) {
+                    animateNumber(counter, 0, 600, 'h/año');
+                } else if (counter.textContent.includes('30,000')) {
+                    animateNumber(counter, 0, 30000, '€ facturación');
+                }
+            });
+        }
+
+        function animateNumber(element, start, end, suffix) {
+            const duration = 2000;
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const current = Math.floor(start + (end - start) * progress);
+                
+                element.textContent = `+${current.toLocaleString()} ${suffix}`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Trigger counter animation when benefits section is visible
+        const benefitsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(animateCounters, 500);
+                    benefitsObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        const benefitsSection = document.querySelector('.benefits');
+        if (benefitsSection) {
+            benefitsObserver.observe(benefitsSection);
+        }
+    </script>
 </body>
 </html>
