@@ -1173,6 +1173,38 @@
            });
        });
 
+       // Funcionalidad para cuando añadas los videos de Loom
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulación de clic en placeholder (opcional)
+            const placeholders = document.querySelectorAll('.video-placeholder');
+            
+            placeholders.forEach(placeholder => {
+                placeholder.addEventListener('click', function() {
+                    // Aquí podrías añadir lógica adicional si es necesario
+                    // Por ejemplo, tracking de clics o animaciones
+                    console.log('Video placeholder clicked');
+                });
+            });
+        });
+
+        // Función para reemplazar placeholder con video real
+        function loadLoomVideo(cardIndex, loomVideoId) {
+            const videoWrapper = document.querySelectorAll('.video-wrapper')[cardIndex];
+            const placeholder = videoWrapper.querySelector('.video-placeholder');
+            
+            // Crear iframe de Loom
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.loom.com/embed/${loomVideoId}`;
+            iframe.frameBorder = '0';
+            iframe.webkitAllowFullScreen = true;
+            iframe.mozAllowFullScreen = true;
+            iframe.allowFullScreen = true;
+            
+            // Reemplazar placeholder con iframe
+            placeholder.style.display = 'none';
+            videoWrapper.appendChild(iframe);
+        }
+
        // Interactive pricing calculator (simplified)
        function calculatePrice() {
            const processes = [
