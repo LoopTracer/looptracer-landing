@@ -335,6 +335,88 @@
         .example-description {
             color: var(--gray-600);
         }
+
+        /* Estilos para el contenedor de video */
+        .video-container {
+            margin-top: 24px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .video-placeholder:hover {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        .video-placeholder:hover .play-button {
+            transform: scale(1.1);
+            background: rgba(59, 130, 246, 0.9);
+        }
+
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(59, 130, 246, 0.8);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            color: white;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .video-info {
+            text-align: center;
+            color: white;
+        }
+
+        .video-duration {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .video-title {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Iframe de Loom (cuando esté disponible) */
+        .video-wrapper iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+        }
         
         /* Process Section */
         .process {
@@ -606,6 +688,11 @@
             
             .container {
                 padding: 0 1rem;
+            }
+
+                .play-button {
+                width: 50px;
+                height: 50px;
             }
         }
         
