@@ -76,10 +76,22 @@
         }
         
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
+            display: flex;
+            align-items: center;
             text-decoration: none;
+        }
+
+        .logo-img {
+            height: 32px; /* Ajusta según tu diseño */
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.25rem; /* o 20px */
+            color: #0057FF; /* Azul principal */
         }
         
         .nav-cta {
@@ -714,7 +726,10 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#" class="logo">LoopTracer</a>
+            <a href="#" class="logo">
+                <img src="assets/logo.png" alt="Logo LoopTracer" class="logo-img" />
+                <span class="logo-text">LoopTracer</span>
+            </a>
             <a href="#cta" class="nav-cta">Pedir diagnóstico gratis</a>
         </div>
     </nav>
