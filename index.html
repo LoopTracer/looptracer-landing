@@ -82,16 +82,20 @@
         }
 
         .logo-img {
-            height: 32px; /* Ajusta según tu diseño */
-            width: auto;
-            margin-right: 8px;
+            height: 48px;             /* Más grande que antes */
+            width: 48px;              /* Hacemos el logo cuadrado */
+            border-radius: 50%;       /* Hace el logo redondo */
+            object-fit: cover;        /* Asegura que la imagen rellene el círculo */
+            margin-right: 10px;
+            background-color: white;  /* Opcional: fondo blanco si el PNG tiene fondo transparente o feo */
+            box-shadow: 0 0 4px rgba(0,0,0,0.1); /* Sombra suave opcional */
         }
 
         .logo-text {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 1.25rem; /* o 20px */
-            color: #0057FF; /* Azul principal */
+            font-size: 1.5rem; /* Un poco más grande */
+            color: #0057FF;
         }
         
         .nav-cta {
