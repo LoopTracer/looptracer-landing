@@ -99,8 +99,8 @@
         }
 
         .logo-img {
-            height: 90px;
-            width: 90px;
+            height: 80px;
+            width: 80px;
             border-radius: 0;           /* CAMBIADO: Era 50%, ahora 0 para logo cuadrado */
             object-fit: contain;        /* CAMBIADO: Era cover, ahora contain para mostrar todo el logo */
             margin-right: 10px;
@@ -310,26 +310,29 @@
             padding: 100px 0;
             background: var(--gray-50);
         }
-        
+
         .examples-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
-        
+
         .example-card {
             background: white;
             padding: 2rem;
             border-radius: 16px;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Asegura que todas las tarjetas tengan la misma altura */
         }
-        
+
         .example-card:hover {
             box-shadow: var(--shadow-md);
             transform: translateY(-2px);
         }
-        
+
         .example-number {
             display: inline-flex;
             align-items: center;
@@ -341,21 +344,24 @@
             border-radius: 50%;
             font-weight: 600;
             margin-bottom: 1rem;
+            flex-shrink: 0; /* Evita que se reduzca */
         }
-        
+
         .example-title {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
-        
+
         .example-description {
             color: var(--gray-600);
+            flex-grow: 1; /* Permite que el texto crezca pero no empuje el video */
         }
 
         /* Estilos para el contenedor de video */
         .video-container {
-            margin-top: 24px;
+            margin-top: auto; /* Esto empuja el video al final del contenedor */
+            flex-shrink: 0; /* Evita que el video se reduzca */
         }
 
         .video-wrapper {
