@@ -749,7 +749,7 @@
     <section class="hero">
         <div class="hero-container">
             <div class="hero-content animate-fade-in-up">
-                <h1>Elimina cualquier tarea repetitiva de tu gestoría</h1>
+                <h1>Elimina cualquier tarea repetitiva de tu despacho</h1>
                 <h2>Diseñamos automatizaciones a medida que se integran con tu entorno actual. Implementamos IA para dar un valor añadido a tus clientes e incluso para cerrar más ventas.</h2>
                 
                 <a href="#cta" class="hero-cta">
@@ -1111,13 +1111,11 @@
        });
 
        // Calendar booking function
-       function openCalendar() {
-           // Simulación de apertura de Calendly
-           alert('🚀 Perfecto! Te redirigiremos a nuestro calendario para que reserves tu diagnóstico gratuito de 15 minutos.\n\n✅ Sin compromiso\n✅ Análisis personalizado\n✅ Plan de automatización a medida');
-           
-           // En producción, aquí irías a Calendly:
-           // window.open('https://calendly.com/tu-enlace', '_blank');
-       }
+        function openCalendar() {
+        window.open('https://calendly.com/contact-looptracer/30min', '_blank');
+        trackEvent('cta_click');
+        }
+
 
        // Intersection Observer for animations
        const observerOptions = {
@@ -1414,7 +1412,7 @@
        const abTests = {
            // Test variations
            heroButtonText: {
-               control: 'Quiero mi diagnóstico de 15 min',
+               control: 'Diagnóstico Gratis',
                variant: 'Ver mi ahorro potencial GRATIS'
            },
            
