@@ -560,7 +560,7 @@
         
         /* CTA Section */
         .final-cta {
-            padding: 100px 0;
+            padding: 100px 0 60px 0;
             background: var(--dark);
             color: white;
             text-align: center;
@@ -591,54 +591,130 @@
             font-size: 1.1rem;
             box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
+            margin-bottom: 4rem;
         }
         
         .cta-button:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-xl);
         }
-        
-        /* FAQ */
-        .faq {
-            padding: 100px 0;
-            background: white;
+
+        /* Contact Info */
+        .contact-info {
+            margin-bottom: 4rem;
         }
-        
-        .faq-list {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .faq-item {
-            background: white;
-            margin-bottom: 1rem;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        .faq-question {
-            width: 100%;
-            padding: 1.5rem;
-            background: none;
-            border: none;
-            text-align: left;
-            font-size: 1.1rem;
+
+        .contact-title {
+            font-size: 1.3rem;
             font-weight: 600;
-            cursor: pointer;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .contact-details {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .contact-item {
+            display: flex;
             align-items: center;
+            gap: 0.7rem;
+            font-size: 1.1rem;
+            opacity: 0.85;
+            transition: opacity 0.3s ease;
         }
-        
-        .faq-answer {
-            padding: 0 1.5rem 1.5rem;
-            color: var(--gray-600);
-            display: none;
+
+        .contact-item:hover {
+            opacity: 1;
         }
-        
-        .faq-answer.active {
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            color: var(--secondary);
+        }
+
+        /* Divider */
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            margin: 3rem auto;
+        }
+
+        /* Alternative Form */
+        .alternative-form {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .form-intro {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
             display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-submit {
+            width: 100%;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 1.2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
         
         /* Footer */
@@ -687,6 +763,20 @@
                 .play-button {
                 width: 50px;
                 height: 50px;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+
+            .contact-details {
+                flex-direction: column;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .final-cta {
+                padding: 60px 0 40px 0;
             }
         }
         
@@ -931,7 +1021,7 @@
     <section class="process">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">¿Cómo? Muy sencillo:</h2>
+                <h2 class="section-title">¡Todo muy simple!</h2>
                 <h3 class="step-title">1º Diagnóstico</h3>
                 <h3 class="step-title">2º Implementación</h3>
                 <h3 class="step-title">3º Ahorro</h3>
@@ -1030,14 +1120,77 @@
 
     <!-- Final CTA Section -->
     <section class="final-cta" id="cta">
-        <div class="container">
-            <h2 class="cta-title">Cuéntanos qué tarea te consume más tiempo</h2>
-            <p class="cta-subtitle">Agenda tu diagnóstico gratis y recibe un plan de automatización personalizado.</p>
-            <a href="#" class="cta-button" onclick="openCalendar()">
-                📅 Reservar diagnóstico
-            </a>
-        </div>
-    </section>
+            <div class="container">
+                <h2 class="cta-title">Cuéntanos qué tarea te consume más tiempo</h2>
+                <p class="cta-subtitle">Agenda tu diagnóstico gratis y recibe un plan de automatización personalizado.</p>
+                <a href="#" class="cta-button" onclick="openCalendar()">
+                    📅 Reservar diagnóstico
+                </a>
+
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <h3 class="contact-title">O contáctanos directamente</h3>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <span>📞</span>
+                            <a href="tel:+34697515248">697 515 248</a>
+                        </div>
+                        <div class="contact-item">
+                            <span>✉️</span>
+                            <a href="mailto:contact@looptracer.com">contact@looptracer.com</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="divider"></div>
+
+                <!-- Alternative Contact Form -->
+                <div class="alternative-form">
+                    <p class="form-intro">Si lo prefieres nosotros te contactamos</p>
+                    <form id="contactForm" onsubmit="handleFormSubmit(event)">
+                        <div class="form-group">
+                            <label class="form-label" for="name">Nombre *</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                class="form-input" 
+                                placeholder="Tu nombre completo"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="email">Tu mejor correo *</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-input" 
+                                placeholder="ejemplo@correo.com"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="phone">Teléfono (opcional)</label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                class="form-input" 
+                                placeholder="Tu número de teléfono"
+                            >
+                        </div>
+                        
+                        <button type="submit" class="form-submit">
+                            Enviar solicitud
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
     <!-- Footer -->
     <footer class="footer">
