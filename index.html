@@ -90,6 +90,7 @@
             align-items: center;
             justify-content: center;
             height: 70px;
+            position: relative;
         }
         
         .logo {
@@ -254,8 +255,8 @@
 
         .dropdown-menu {
             position: absolute;
-            top: 70px;
-            left: 2rem;
+            top: 100%;
+            left: 0;
             background: white;
             border-radius: 12px;
             box-shadow: var(--shadow-xl);
@@ -266,6 +267,7 @@
             min-width: 200px;
             border: 1px solid var(--gray-200);
             z-index: 1000;
+            margin-top: 8px;
         }
 
         .dropdown-menu.active {
@@ -968,7 +970,7 @@
                 <li><a href="#" onclick="scrollToSection('guarantee')">Garantía</a></li>
                 <li><a href="#" onclick="scrollToSection('process')">Nuestro Proceso</a></li>
                 <li><a href="#" onclick="scrollToSection('pricing')">Precios</a></li>
-                <li><a href="#" onclick="scrollToSection('cta')">Contacto</a></li>
+                <li><a href="#" onclick="scrollToSection('final-cta')">Contacto</a></li>
             </ul>
         </nav>
         
