@@ -219,6 +219,88 @@
         stroke: currentColor;
         }
         
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 8px;
+            margin-right: auto;
+            background: none;
+            border: none;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 2px;
+            background-color: var(--primary);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 70px;
+            left: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            min-width: 200px;
+            border: 1px solid var(--gray-200);
+            z-index: 1000;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+            padding: 12px 0;
+            margin: 0;
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--primary-light);
+            border-left-color: var(--primary);
+            color: var(--primary);
+        }
+
         /* Benefits Section */
         .benefits {
             padding: 100px 0;
@@ -871,14 +953,30 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <img src="assets/logo-400.png" alt="Logo LoopTracer" class="logo-img" />
-                <span class="logo-text">LoopTracer</span>
-            </a>
-        </div>
-    </nav>
+    <div class="nav-container">
+        <button class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <nav class="dropdown-menu" id="dropdownMenu">
+            <ul>
+                <li><a href="#" onclick="scrollToSection('hero')">Inicio</a></li>
+                <li><a href="#" onclick="scrollToSection('benefits')">Ventajas</a></li>
+                <li><a href="#" onclick="scrollToSection('examples')">Ejemplos Reales</a></li>
+                <li><a href="#" onclick="scrollToSection('guarantee')">Garantía</a></li>
+                <li><a href="#" onclick="scrollToSection('process')">Nuestro Proceso</a></li>
+                <li><a href="#" onclick="scrollToSection('pricing')">Precios</a></li>
+                <li><a href="#" onclick="scrollToSection('cta')">Contacto</a></li>
+            </ul>
+        </nav>
+        
+        <a href="#" class="logo">
+            <img src="assets/logo-400.png" alt="Logo LoopTracer" class="logo-img" />
+            <span class="logo-text">LoopTracer</span>
+        </a>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -1307,6 +1405,43 @@
                navbar.style.boxShadow = 'none';
            }
        });
+
+       // Menu toggle functionality
+        function toggleMenu() {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            menuToggle.classList.toggle('active');
+            dropdownMenu.classList.toggle('active');
+        }
+
+        // Scroll to section with menu close
+        function scrollToSection(sectionClass) {
+            const section = document.querySelector(`.${sectionClass}`);
+            if (section) {
+                section.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            
+            // Close menu after navigation
+            const menuToggle = document.querySelector('.menu-toggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            menuToggle.classList.remove('active');
+            dropdownMenu.classList.remove('active');
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (!menuToggle.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                menuToggle.classList.remove('active');
+                dropdownMenu.classList.remove('active');
+            }
+        });
 
        // Calendar booking function
         function openCalendar() {
