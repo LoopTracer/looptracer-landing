@@ -597,6 +597,119 @@
             transform: translateY(-3px);
             box-shadow: var(--shadow-xl);
         }
+
+        /* Contact Information */
+        .contact-info {
+            margin: 3rem 0;
+        }
+
+        .contact-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .contact-details {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-item a:hover {
+            color: var(--secondary);
+        }
+
+        /* Divider */
+        .divider {
+            width: 100px;
+            height: 2px;
+            background: var(--secondary);
+            margin: 3rem auto;
+            border-radius: 2px;
+        }
+
+        /* Alternative Form */
+        .alternative-form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-intro {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--secondary);
+            color: var(--dark);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        @media (max-width: 768px) {
+            .contact-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
         
         /* FAQ */
         .faq {
@@ -1179,6 +1292,41 @@
         trackEvent('cta_click');
         }
 
+        // Form submission handler
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone') || ''
+            };
+            
+            // Validate form
+            const errors = validateForm(data);
+            if (errors.length > 0) {
+                alert('Por favor, corrige los siguientes errores:\n' + errors.join('\n'));
+                return;
+            }
+            
+            // Show loading state
+            const submitButton = event.target.querySelector('.form-submit');
+            const originalText = submitButton.textContent;
+            submitButton.textContent = 'Enviando...';
+            submitButton.disabled = true;
+            
+            // Simulate form submission (replace with real endpoint)
+            setTimeout(() => {
+                alert('¡Gracias! Te contactaremos pronto.');
+                event.target.reset();
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+                trackEvent('form_submit');
+            }, 1000);
+            
+            console.log('Form data:', data);
+        }
 
        // Intersection Observer for animations
        const observerOptions = {
