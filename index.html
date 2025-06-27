@@ -611,7 +611,44 @@
             font-weight: 600;
             margin-bottom: 2rem;
         }
-        
+
+        /* === MODAL CALCULADORA === */
+        .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(4px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+        display: flex;
+        opacity: 1;
+        }
+
+        .calculator-modal {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        max-width: 900px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        position: relative;
+        transform: scale(0.9) translateY(20px);
+        transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .calculator-modal {
+        transform: scale(1) translateY(0);
+        }
+                
         /* Guarantee Section */
         .guarantee {
             padding: 80px 0;
@@ -1206,10 +1243,88 @@
                 <div class="pricing-badge">Ahorras mínimo 5 h semanales o te devolvemos el dinero.</div>
                 <h3 class="pricing-title">Automatización personalizada para tu gestoría</h3>
                 <p style="color: var(--gray-600); margin-bottom: 2rem;">Precio calculado según los procesos que quieras automatizar. Agenda una reunión y te hacemos presupuesto sin compromiso.</p>
-                <a href="#cta" class="hero-cta">Calcular mi precio personalizado</a>
+                <button class="demo-button" onclick="showCalculator()">
+                    Calcular precio personalizado
+                </button>
             </div>
         </div>
     </section>
+
+    <!-- MODAL OVERLAY + CONTENIDO -->
+    <div class="modal-overlay" id="calculatorModal">
+    <div class="calculator-modal">
+        <div class="modal-header">
+        <h2 class="calculator-title">Diseña tu sistema contable automático</h2>
+        <p class="calculator-subtitle">Elige lo que más te hace perder tiempo. Te mostramos el precio, el ahorro mensual y cuándo recuperas tu inversión.</p>
+        <button class="modal-close" onclick="closeCalculator()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+        <!-- INSTRUCCIONES -->
+        <div class="process-instructions">
+            Selecciona los procesos que haces manualmente. Calculamos tu tiempo ganado y ROI estimado.
+        </div>
+
+        <!-- PROCESOS -->
+        <div class="process-grid">
+            <!-- Ejemplo proceso -->
+            <div class="process-item" data-price="800" data-savings="20" onclick="toggleProcess(this)">
+            <div class="process-name">Tus facturas se generan solas</div>
+            <div class="process-desc">Ya no tendrás que revisar, copiar y enviar facturas manualmente</div>
+            <div class="process-details">
+                <div class="process-savings">⏱️ Ahorro: 20h/mes</div>
+                <div class="process-price">💰 Inversión: 800€</div>
+                <div class="process-roi">📈 ROI en 1 mes</div>
+            </div>
+            </div>
+            <!-- Copia los demás procesos igual -->
+        </div>
+
+        <!-- RESUMEN -->
+        <div class="calculator-summary">
+            <h3 class="summary-title">🧾 Resumen de tu sistema</h3>
+            <div class="summary-stats">
+            <div class="stat-item">
+                <span class="stat-label">💸 Inversión total estimada:</span>
+                <span class="total-price">0€</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">⏱️ Ahorro mensual:</span>
+                <span class="total-savings">0 horas</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">📈 Valor generado cada mes:</span>
+                <span class="monthly-value">0€</span>
+            </div>
+            <div class="stat-item roi-highlight">
+                <span class="stat-label">📉 ROI:</span>
+                <span class="roi-text">Recuperas la inversión en <span id="roi-months">-</span> meses</span>
+            </div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <div class="cta-text">
+            <strong>¿Quieres ver cómo sería aplicado en tu caso?</strong><br>
+            En una reunión rápida (15 min) vemos si tu selección es viable, resolvemos dudas y te doy presupuesto exacto.
+            </div>
+
+            <button class="calculator-cta" id="calculator-cta" onclick="openCalendar()" disabled>
+            Quiero este pack → agenda gratis
+            </button>
+
+            <div class="cta-footer">
+            📅 Sin compromiso. Sin permanencias. Sin líos.
+            </div>
+
+            <div class="urgency-message">
+            Solo 2 nuevos packs activados cada mes para mantener soporte premium.
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
 
     <!-- FAQ Section -->
     <section class="faq">
@@ -1545,19 +1660,65 @@
             videoWrapper.appendChild(iframe);
         }
 
-       // Interactive pricing calculator (simplified)
-       function calculatePrice() {
-           const processes = [
-               { name: 'Automatización de facturas', selected: false, price: 800 },
-               { name: 'Notificaciones de Hacienda', selected: false, price: 400 },
-               { name: 'Recordatorios a clientes', selected: false, price: 300 },
-               { name: 'Conciliación bancaria', selected: false, price: 600 },
-               { name: 'Informes automáticos', selected: false, price: 500 }
-           ];
-           
-           // Esta función se puede expandir para crear un selector interactivo
-           console.log('Calculadora de precios lista para implementar');
-       }
+        function showCalculator() {
+        const modal = document.getElementById('calculatorModal');
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+        }
+
+        function closeCalculator() {
+        const modal = document.getElementById('calculatorModal');
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+        }
+
+        function toggleProcess(element) {
+        element.classList.toggle('selected');
+        updateCalculatorSummary();
+        }
+
+        function updateCalculatorSummary() {
+        const selectedItems = document.querySelectorAll('.process-item.selected');
+        let totalPrice = 0;
+        let totalSavings = 0;
+
+        selectedItems.forEach(item => {
+            totalPrice += parseInt(item.dataset.price);
+            totalSavings += parseInt(item.dataset.savings);
+        });
+
+        const monthlyValue = totalSavings * 25;
+
+        document.querySelector('.total-price').textContent = totalPrice.toLocaleString() + '€';
+        document.querySelector('.total-savings').textContent = `${totalSavings} horas`;
+        document.querySelector('.monthly-value').textContent = monthlyValue.toLocaleString() + '€';
+
+        const roiMonths = totalPrice > 0 ? Math.ceil(totalPrice / monthlyValue) : 0;
+        document.getElementById('roi-months').textContent = totalPrice > 0 ? roiMonths : '-';
+
+        const ctaButton = document.getElementById('calculator-cta');
+        if (selectedItems.length > 0) {
+            ctaButton.disabled = false;
+            ctaButton.textContent = `Quiero este pack (${totalPrice.toLocaleString()}€) → agenda gratis`;
+        } else {
+            ctaButton.disabled = true;
+            ctaButton.textContent = 'Quiero este pack → agenda gratis';
+        }
+        }
+
+        // Click fuera cierra
+        document.getElementById('calculatorModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCalculator();
+        }
+        });
+
+        // Tecla Escape cierra
+        document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeCalculator();
+        }
+        });
 
        // Lead scoring based on interactions
        let leadScore = 0;
