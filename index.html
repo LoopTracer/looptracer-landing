@@ -2206,34 +2206,27 @@
            });
        });
 
-        // Enhanced Calculator functionality
+        // Calculator functionality
         function showCalculator() {
-            const calculator = document.getElementById('calculator');
-            calculator.classList.add('active');
-            calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const modal = document.getElementById('calculatorModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
             trackEvent('calculator_opened');
+        }
+
+        function closeCalculator() {
+            const modal = document.getElementById('calculatorModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scrolling
+            trackEvent('calculator_closed');
         }
 
         function toggleProcess(element) {
             element.classList.toggle('selected');
             updateCalculatorSummary();
-            trackEvent('process_selected');
-            
-            // Add discount badge if more than 2 selected
-            const selectedCount = document.querySelectorAll('.process-item.selected').length;
-            const summaryCard = document.querySelector('.calculator-summary');
-            
-            if (selectedCount >= 3 && !summaryCard.querySelector('.discount-badge')) {
-                const discountBadge = document.createElement('div');
-                discountBadge.className = 'discount-badge';
-                discountBadge.textContent = 'Pack optimizado';
-                summaryCard.appendChild(discountBadge);
-            } else if (selectedCount < 3) {
-                const existingBadge = summaryCard.querySelector('.discount-badge');
-                if (existingBadge) {
-                    existingBadge.remove();
-                }
-            }
+            trackEvent('process_selected', {
+                process: element.querySelector('.process-name').textContent
+            });
         }
 
         function updateCalculatorSummary() {
@@ -2246,64 +2239,51 @@
                 totalSavings += parseInt(item.dataset.savings);
             });
             
-            // Apply discount for 3+ processes
-            if (selectedItems.length >= 3) {
-                totalPrice = Math.round(totalPrice * 0.9); // 10% discount
-            }
-            
-            // Calculate monthly value (25€/hour)
+            // Calculate monthly value (assuming 25€/hour cost)
             const monthlyValue = totalSavings * 25;
             
-            // Calculate ROI
-            const roiMonths = totalPrice > 0 && monthlyValue > 0 ? (totalPrice / monthlyValue) : 0;
-            
             // Update display
-            document.getElementById('total-investment').textContent = totalPrice + '€';
-            document.getElementById('monthly-savings').textContent = totalSavings + ' h';
-            document.getElementById('monthly-value').textContent = monthlyValue + '€';
+            document.querySelector('.total-price').textContent = totalPrice.toLocaleString() + '€';
+            document.querySelector('.total-savings').textContent = `${totalSavings} horas`;
+            document.querySelector('.monthly-value').textContent = monthlyValue.toLocaleString() + '€';
             
-            if (roiMonths > 0) {
-                if (roiMonths < 1) {
-                    document.getElementById('roi-period').textContent = Math.ceil(roiMonths * 30) + ' días';
-                } else {
-                    document.getElementById('roi-period').textContent = Math.ceil(roiMonths) + ' meses';
-                }
-            } else {
-                document.getElementById('roi-period').textContent = '-';
-            }
+            // Calculate ROI
+            const roiMonths = totalPrice > 0 ? Math.ceil(totalPrice / monthlyValue) : 0;
+            document.getElementById('roi-months').textContent = totalPrice > 0 ? roiMonths : '-';
             
-            // Update CTA button
+            // Update selected count
+            const selectedCount = selectedItems.length;
+            
+            // Enable/disable CTA
             const ctaButton = document.getElementById('calculator-cta');
             if (selectedItems.length > 0) {
                 ctaButton.disabled = false;
-                ctaButton.innerHTML = `📅 Quiero este pack de ${totalPrice}€ → agenda gratis`;
-                
-                // Track high-intent selections
-                if (totalPrice > 1500) {
-                    trackEvent('high_value_selection');
-                }
+                ctaButton.textContent = `Quiero este pack (${totalPrice.toLocaleString()}€) → agenda gratis`;
             } else {
                 ctaButton.disabled = true;
-                ctaButton.innerHTML = '📅 Quiero este pack → agenda gratis';
-            }
-            
-            // Update summary title based on selection
-            const summaryTitle = document.querySelector('.summary-title');
-            if (selectedItems.length > 0) {
-                summaryTitle.innerHTML = `🧾 Has seleccionado ${selectedItems.length} proceso${selectedItems.length > 1 ? 's' : ''} →`;
-            } else {
-                summaryTitle.innerHTML = '🧾 Resumen de tu sistema';
+                ctaButton.textContent = 'Quiero este pack → agenda gratis';
             }
         }
 
-       // Exit intent detection (simplified)
-       document.addEventListener('mouseleave', function(e) {
-           if (e.clientY <= 0) {
-               console.log('Exit intent detected');
-               // En producción: mostrar popup de último momento o similar
-               // showExitIntentModal();
-           }
-       });
+        // Close modal when clicking outside
+        document.getElementById('calculatorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalculator();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeCalculator();
+            }
+        });
+
+        // Placeholder for tracking function
+        function trackEvent(eventName, data = {}) {
+            console.log('Event tracked:', eventName, data);
+            // Integrate with your analytics tool here
+        }
 
        // Form validation and enhancement (for future contact forms)
        function validateForm(formData) {
