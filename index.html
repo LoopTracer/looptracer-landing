@@ -612,78 +612,82 @@
             margin-bottom: 2rem;
         }
         
-        /* Calculator Section - Improved */
-        .calculator {
-            padding: 80px 0;
-            background: linear-gradient(135deg, var(--primary-light) 0%, var(--gray-50) 100%);
-            display: none;
-        }
-
-        .calculator.active {
-            display: block;
-        }
-
-        .calculator-card {
+        /* Calculator Modal */
+        .calculator-modal {
             background: white;
-            padding: 3rem;
-            border-radius: 20px;
+            border-radius: 16px;
             box-shadow: var(--shadow-xl);
             max-width: 900px;
-            margin: 0 auto;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
             position: relative;
-            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
         }
 
-        .calculator-card::before {
-            content: '';
+        .modal-overlay.active .calculator-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 2rem 2rem 1rem;
+            border-bottom: 1px solid var(--gray-200);
+            position: relative;
+        }
+
+        .modal-close {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-1);
+            top: 1rem;
+            right: 1rem;
+            background: var(--gray-50);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--gray-600);
+            transition: all 0.2s ease;
         }
 
-        .calculator-header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .modal-close:hover {
+            background: var(--gray-200);
+            color: var(--dark);
         }
 
         .calculator-title {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             font-weight: 700;
             color: var(--dark);
-            margin-bottom: 1rem;
-            line-height: 1.2;
+            margin-bottom: 0.5rem;
         }
 
         .calculator-subtitle {
             color: var(--gray-600);
-            font-size: 1.15rem;
-            margin-bottom: 1.5rem;
+            font-size: 1rem;
         }
 
-        .calculator-instructions {
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 0.95rem;
-            margin-bottom: 2.5rem;
-            font-style: italic;
+        .modal-body {
+            padding: 2rem;
         }
 
         .process-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
         .process-item {
             border: 2px solid var(--gray-200);
-            border-radius: 16px;
-            padding: 2rem;
+            border-radius: 12px;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             position: relative;
             background: white;
         }
@@ -691,264 +695,339 @@
         .process-item:hover {
             border-color: var(--primary);
             box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
         }
 
         .process-item.selected {
             border-color: var(--primary);
             background: var(--primary-light);
-            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .process-item.selected::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .process-item.selected::after {
             content: '✓';
             position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: var(--primary);
+            top: 12px;
+            right: 12px;
+            width: 20px;
+            height: 20px;
             color: white;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            font-size: 12px;
+            font-weight: 600;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.9rem;
-            font-weight: 700;
-            box-shadow: var(--shadow-md);
+            z-index: 1;
         }
 
         .process-name {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             color: var(--dark);
-            margin-bottom: 0.75rem;
-            line-height: 1.3;
-            padding-right: 40px;
+            margin-bottom: 0.5rem;
+            padding-right: 30px;
         }
 
         .process-desc {
             color: var(--gray-600);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
             line-height: 1.5;
         }
 
-        .process-metrics {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+        .process-instructions {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem;
+            background: var(--gray-50);
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
         }
 
-        .process-metric {
+        .process-details {
             display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            flex-direction: column;
+            gap: 0.25rem;
+            margin-top: 1rem;
+        }
+
+        .process-details > div {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        .process-price {
+            color: var(--primary);
             font-weight: 600;
         }
 
-        .process-metric.savings {
+        .process-roi {
             color: var(--success);
-        }
-
-        .process-metric.price {
-            color: var(--primary);
-            font-size: 1.1rem;
-        }
-
-        .process-metric.roi {
-            color: var(--warning);
-        }
-
-        .calculator-summary {
-            background: linear-gradient(135deg, var(--gray-50) 0%, var(--primary-light) 100%);
-            border-radius: 16px;
-            padding: 2.5rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            border: 1px solid var(--gray-200);
+            font-weight: 500;
         }
 
         .summary-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.2rem;
             color: var(--dark);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .summary-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .summary-stat {
+            margin-bottom: 1rem;
             text-align: center;
         }
 
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
+        .summary-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
         }
 
-        .stat-value.price {
-            color: var(--primary);
-        }
-
-        .stat-value.savings {
-            color: var(--success);
-        }
-
-        .stat-value.value {
-            color: var(--secondary);
-        }
-
-        .stat-value.roi {
-            color: var(--warning);
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
         }
 
         .stat-label {
-            color: var(--gray-600);
             font-size: 0.9rem;
-            font-weight: 500;
+            color: var(--gray-600);
+        }
+
+        .stat-item span:last-child {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .roi-highlight {
+            background: var(--primary-light);
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .roi-highlight .stat-label {
+            color: var(--dark);
+            font-weight: 600;
         }
 
         .cta-section {
             text-align: center;
         }
 
-        .cta-pre-text {
-            font-size: 1.1rem;
+        .cta-text {
+            margin-bottom: 1.5rem;
             color: var(--dark);
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .cta-description {
-            color: var(--gray-600);
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
             line-height: 1.5;
         }
 
-        .calculator-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--gradient-1);
-            color: white;
-            padding: 1.25rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.15rem;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            box-shadow: var(--shadow-md);
+        .cta-footer {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--gray-600);
         }
 
-        .calculator-cta:hover {
-            transform: translateY(-3px);
+        .urgency-message {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: #ecfdf5;
+            color: var(--success);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .calculator-summary {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray-200);
+        }
+
+        .total-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .total-savings {
+            font-size: 1rem;
+            color: var(--success);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .roi-text {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+
+        .calculator-cta {
+            display: block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .calculator-cta:hover:not(:disabled) {
+            transform: translateY(-1px);
             box-shadow: var(--shadow-lg);
         }
 
         .calculator-cta:disabled {
-            opacity: 0.5;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
-            background: var(--gray-300);
         }
 
-        .cta-footer {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-            color: var(--gray-500);
-        }
-
-        .urgency-message {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--success);
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 1.5rem;
-            display: inline-block;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-
-        .discount-badge {
-            position: absolute;
-            top: -10px;
-            right: 20px;
-            background: var(--secondary);
+        /* Demo button */
+        .demo-button {
+            background: var(--gradient-1);
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            transform: rotate(15deg);
-            box-shadow: var(--shadow-md);
-        }
-
-        .process-tooltip {
-            position: absolute;
-            bottom: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--dark);
-            color: white;
-            padding: 0.75rem 1rem;
+            padding: 1rem 2rem;
+            border: none;
             border-radius: 8px;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            z-index: 10;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 2rem;
+            transition: all 0.2s ease;
         }
 
-        .process-item:hover .process-tooltip {
-            opacity: 1;
+        .demo-button:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
         }
 
-        @media (max-width: 768px) {
+        /* Mobile Responsive */
+                    @media (max-width: 768px) {
+                .process-details {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 0.5rem;
+                }
+
+                .process-details > div {
+                    font-size: 0.75rem;
+                    flex: 1;
+                    min-width: calc(50% - 0.25rem);
+                }
+
+                .summary-stats {
+                    gap: 0.5rem;
+                }
+
+                .stat-item {
+                    flex-direction: column;
+                    text-align: center;
+                    gap: 0.25rem;
+                }
+
+                .cta-text {
+                    font-size: 0.9rem;
+                    margin-bottom: 1.25rem;
+                }
+            }
+            .modal-overlay {
+                padding: 0.5rem;
+            }
+
+            .calculator-modal {
+                max-height: 95vh;
+                border-radius: 12px;
+            }
+
+            .modal-header {
+                padding: 1.5rem 1.5rem 1rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+
             .process-grid {
                 grid-template-columns: 1fr;
+                gap: 0.75rem;
             }
-            
-            .calculator-card {
-                padding: 2rem;
-                margin: 0 1rem;
+
+            .process-item {
+                padding: 1.25rem;
             }
-            
+
             .calculator-title {
-                font-size: 1.8rem;
-            }
-            
-            .summary-stats {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            
-            .stat-value {
                 font-size: 1.5rem;
             }
-            
-            .calculator-cta {
-                padding: 1rem 2rem;
-                font-size: 1rem;
+
+            .calculator-subtitle {
+                font-size: 0.875rem;
+            }
+
+            .total-price {
+                font-size: 1.75rem;
+            }
+
+            .calculator-summary {
+                padding: 1.25rem;
+            }
+
+            .process-name {
+                font-size: 0.9rem;
+                padding-right: 25px;
+            }
+
+            .process-desc {
+                font-size: 0.8rem;
+            }
+
+            .process-price {
+                font-size: 1.1rem;
             }
         }
+
+        @media (max-width: 480px) {
+            .modal-overlay {
+                padding: 0.25rem;
+            }
+
+            .modal-header {
+                padding: 1.25rem 1.25rem 0.75rem;
+            }
+
+            .modal-body {
+                padding: 1.25rem;
+            }
+
+            .process-item {
+                padding: 1rem;
+            }
+
+            .calculator-title {
+                font-size: 1.3rem;
+            }
 
         /* Guarantee Section */
         .guarantee {
@@ -1549,115 +1628,119 @@
         </div>
     </section>
 
-    <!-- Calculator Section - Improved -->
-    <section id="calculator" class="calculator">
-        <div class="container">
-            <div class="calculator-card">
-                <div class="calculator-header">
-                    <h2 class="calculator-title">Diseña tu sistema contable automático y calcula el ahorro</h2>
-                    <p class="calculator-subtitle">Elige lo que más te hace perder tiempo. Te mostramos el precio, el ahorro mensual y cuándo recuperas tu inversión.</p>
-                    <p class="calculator-instructions">Selecciona los procesos que haces manualmente. Calculamos tu tiempo ganado y ROI estimado.</p>
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="calculatorModal">
+        <div class="calculator-modal">
+            <div class="modal-header">
+                <h2 class="calculator-title">Diseña tu sistema contable automático</h2>
+                <p class="calculator-subtitle">Elige lo que más te hace perder tiempo. Te mostramos el precio, el ahorro mensual y cuándo recuperas tu inversión.</p>
+                <button class="modal-close" onclick="closeCalculator()">&times;</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="process-instructions">
+                    Selecciona los procesos que haces manualmente. Calculamos tu tiempo ganado y ROI estimado.
                 </div>
                 
                 <div class="process-grid">
                     <div class="process-item" data-price="800" data-savings="20" onclick="toggleProcess(this)">
                         <div class="process-name">Tus facturas se generan solas</div>
-                        <div class="process-desc">Ya no tendrás que revisar, copiar y enviar facturas manualmente.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 20 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 800€</div>
-                            <div class="process-metric roi">📈 ROI en 1 mes</div>
+                        <div class="process-desc">Ya no tendrás que revisar, copiar y enviar facturas manualmente</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 20h/mes</div>
+                            <div class="process-price">💰 Inversión: 800€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
                         </div>
-                        <div class="process-tooltip">Incluye conexión con tu software, OCR de PDFs, y envío automático por email</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="600" data-savings="15" onclick="toggleProcess(this)">
+                        <div class="process-name">Nunca te pierdes una fecha de Hacienda</div>
+                        <div class="process-desc">Recibes alertas automáticas antes de cada vencimiento u obligación</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 15h/mes</div>
+                            <div class="process-price">💰 Inversión: 600€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="process-item" data-price="400" data-savings="10" onclick="toggleProcess(this)">
+                        <div class="process-name">Tus clientes no se olvidan de pagar</div>  
+                        <div class="process-desc">Recordatorios automáticos de pagos y documentos que funcionan</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 10h/mes</div>
+                            <div class="process-price">💰 Inversión: 400€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
+                        </div>
                     </div>
                     
                     <div class="process-item" data-price="900" data-savings="25" onclick="toggleProcess(this)">
                         <div class="process-name">Conciliación bancaria sin manos</div>
-                        <div class="process-desc">Los movimientos bancarios se concilian automáticamente con tu contabilidad.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 25 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 900€</div>
-                            <div class="process-metric roi">📈 ROI en 1 mes</div>
+                        <div class="process-desc">Los movimientos bancarios se concilian automáticamente con tu contabilidad</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 25h/mes</div>
+                            <div class="process-price">💰 Inversión: 900€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
                         </div>
-                        <div class="process-tooltip">Conexión directa con bancos, clasificación automática e integración total</div>
-                    </div>
-                    
-                    <div class="process-item" data-price="400" data-savings="10" onclick="toggleProcess(this)">
-                        <div class="process-name">Tus clientes no se olvidan de pagar</div>
-                        <div class="process-desc">Recordatorios automáticos de pagos, documentos y vencimientos.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 10 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 400€</div>
-                            <div class="process-metric roi">📈 ROI en 2 meses</div>
-                        </div>
-                        <div class="process-tooltip">Email, SMS y WhatsApp automatizados con seguimiento de estados</div>
                     </div>
                     
                     <div class="process-item" data-price="500" data-savings="12" onclick="toggleProcess(this)">
-                        <div class="process-name">Tus informes de gestión llegan solos cada lunes</div>
-                        <div class="process-desc">Informes automáticos generados y enviados a tus clientes sin intervención.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 12 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 500€</div>
-                            <div class="process-metric roi">📈 ROI en 2 meses</div>
+                        <div class="process-name">Tus informes llegan solos cada lunes</div>
+                        <div class="process-desc">Informes de gestión generados y enviados automáticamente a tus clientes</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 12h/mes</div>
+                            <div class="process-price">💰 Inversión: 500€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
                         </div>
-                        <div class="process-tooltip">Informes personalizados, gráficos automáticos y envío programado</div>
                     </div>
                     
                     <div class="process-item" data-price="700" data-savings="18" onclick="toggleProcess(this)">
-                        <div class="process-name">Las nóminas se procesan automáticamente</div>
-                        <div class="process-desc">Cálculo, generación y envío de nóminas sin revisión manual.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 18 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 700€</div>
-                            <div class="process-metric roi">📈 ROI en 1 mes</div>
+                        <div class="process-name">Las nóminas se procesan solas</div>
+                        <div class="process-desc">Nóminas calculadas, generadas y enviadas automáticamente cada mes</div>
+                        <div class="process-details">
+                            <div class="process-savings">⏱️ Ahorro: 18h/mes</div>
+                            <div class="process-price">💰 Inversión: 700€</div>
+                            <div class="process-roi">📈 ROI en 1 mes</div>
                         </div>
-                        <div class="process-tooltip">Integración con Seguridad Social, cálculos automáticos y envío seguro</div>
-                    </div>
-                    
-                    <div class="process-item" data-price="600" data-savings="15" onclick="toggleProcess(this)">
-                        <div class="process-name">Nunca más olvides un vencimiento de Hacienda</div>
-                        <div class="process-desc">Alertas automáticas de vencimientos y obligaciones fiscales.</div>
-                        <div class="process-metrics">
-                            <div class="process-metric savings">🔁 Ahorro: 15 h/mes</div>
-                            <div class="process-metric price">💰 Inversión: 600€</div>
-                            <div class="process-metric roi">📈 ROI en 2 meses</div>
-                        </div>
-                        <div class="process-tooltip">Monitoreo 24/7, alertas múltiples y seguimiento de cumplimiento</div>
                     </div>
                 </div>
                 
                 <div class="calculator-summary">
                     <h3 class="summary-title">🧾 Resumen de tu sistema</h3>
-                    <div class="summary-stats">
-                        <div class="summary-stat">
-                            <div class="stat-value price" id="total-investment">0€</div>
-                            <div class="stat-label">Inversión total estimada</div>
-                        </div>
-                        <div class="summary-stat">
-                            <div class="stat-value savings" id="monthly-savings">0 h</div>
-                            <div class="stat-label">Ahorro mensual</div>
-                        </div>
-                        <div class="summary-stat">
-                            <div class="stat-value value" id="monthly-value">0€</div>
-                            <div class="stat-label">Valor generado cada mes</div>
-                        </div>
-                        <div class="summary-stat">
-                            <div class="stat-value roi" id="roi-period">-</div>
-                            <div class="stat-label">Recuperas inversión en</div>
+                    <div class="summary-content">
+                        <div class="summary-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">💸 Inversión total estimada:</span>
+                                <span class="total-price">0€</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">⏱️ Ahorro mensual:</span>
+                                <span class="total-savings">0 horas</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">📈 Valor generado cada mes:</span>
+                                <span class="monthly-value">0€</span>
+                            </div>
+                            <div class="stat-item roi-highlight">
+                                <span class="stat-label">📉 ROI:</span>
+                                <span class="roi-text">Recuperas la inversión en <span id="roi-months">-</span> meses</span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="cta-section">
-                    <div class="cta-pre-text">¿Quieres ver cómo sería aplicado en tu caso?</div>
-                    <div class="cta-description">En una reunión rápida (15 min) vemos si tu selección es viable, resolvemos dudas y te doy presupuesto exacto.</div>
+                    <div class="cta-text">
+                        <strong>¿Quieres ver cómo sería aplicado en tu caso?</strong><br>
+                        En una reunión rápida (15 min) vemos si tu selección es viable, resolvemos dudas y te doy presupuesto exacto.
+                    </div>
                     
                     <button class="calculator-cta" id="calculator-cta" onclick="openCalendar()" disabled>
-                        📅 Quiero este pack → agenda gratis
+                        Quiero este pack → agenda gratis
                     </button>
                     
-                    <div class="cta-footer">Sin compromiso. Sin permanencias. Sin líos.</div>
+                    <div class="cta-footer">
+                        📅 Sin compromiso. Sin permanencias. Sin líos.
+                    </div>
                     
                     <div class="urgency-message">
                         Solo 2 nuevos packs activados cada mes para mantener soporte premium.
@@ -1665,7 +1748,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- FAQ Section -->
     <section class="faq">
