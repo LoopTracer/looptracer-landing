@@ -612,6 +612,197 @@
             margin-bottom: 2rem;
         }
         
+        /* Calculator Section */
+        .calculator {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--gray-50) 100%);
+            display: none;
+        }
+
+        .calculator.active {
+            display: block;
+        }
+
+        .calculator-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-xl);
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-1);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .calculator-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .calculator-subtitle {
+            color: var(--gray-600);
+            font-size: 1.1rem;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .process-item {
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .process-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .process-item.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .process-item.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .process-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .process-desc {
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .process-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .process-savings {
+            font-size: 0.85rem;
+            color: var(--success);
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        .calculator-summary {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .total-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .total-savings {
+            font-size: 1.2rem;
+            color: var(--success);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .roi-text {
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .calculator-cta {
+            display: inline-block;
+            background: var(--gradient-1);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+
+        .calculator-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .calculator-cta:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        @media (max-width: 768px) {
+            .process-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator-card {
+                padding: 2rem;
+                margin: 0 1rem;
+            }
+            
+            .calculator-title {
+                font-size: 1.5rem;
+            }
+            
+            .total-price {
+                font-size: 2rem;
+            }
+        }
+
         /* Guarantee Section */
         .guarantee {
             padding: 80px 0;
@@ -1206,7 +1397,73 @@
                 <div class="pricing-badge">Ahorras mínimo 5 h semanales o te devolvemos el dinero.</div>
                 <h3 class="pricing-title">Automatización personalizada para tu gestoría</h3>
                 <p style="color: var(--gray-600); margin-bottom: 2rem;">Precio calculado según los procesos que quieras automatizar. Agenda una reunión y te hacemos presupuesto sin compromiso.</p>
-                <a href="#cta" class="hero-cta">Calcular mi precio personalizado</a>
+                <a href="javascript:void(0)" class="hero-cta" onclick="showCalculator()">Calcular mi precio personalizado</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculator Section -->
+    <section id="calculator" class="calculator">
+        <div class="container">
+            <div class="calculator-card">
+                <div class="calculator-header">
+                    <h2 class="calculator-title">Calcula tu precio personalizado</h2>
+                    <p class="calculator-subtitle">Selecciona los procesos que quieres automatizar y descubre tu ahorro</p>
+                </div>
+                
+                <div class="process-grid">
+                    <div class="process-item" data-price="800" data-savings="20" onclick="toggleProcess(this)">
+                        <div class="process-name">Automatización de facturas</div>
+                        <div class="process-desc">Genera y envía facturas automáticamente desde tu gestoría</div>
+                        <div class="process-price">800€</div>
+                        <div class="process-savings">Ahorras 20h/mes</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="600" data-savings="15" onclick="toggleProcess(this)">
+                        <div class="process-name">Notificaciones de Hacienda</div>
+                        <div class="process-desc">Recibe alertas automáticas de vencimientos y obligaciones</div>
+                        <div class="process-price">600€</div>
+                        <div class="process-savings">Ahorras 15h/mes</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="400" data-savings="10" onclick="toggleProcess(this)">
+                        <div class="process-name">Recordatorios a clientes</div>  
+                        <div class="process-desc">Envía recordatorios automáticos de pagos y documentos</div>
+                        <div class="process-price">400€</div>
+                        <div class="process-savings">Ahorras 10h/mes</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="900" data-savings="25" onclick="toggleProcess(this)">
+                        <div class="process-name">Conciliación bancaria</div>
+                        <div class="process-desc">Concilia automáticamente movimientos bancarios con contabilidad</div>
+                        <div class="process-price">900€</div>
+                        <div class="process-savings">Ahorras 25h/mes</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="500" data-savings="12" onclick="toggleProcess(this)">
+                        <div class="process-name">Informes automáticos</div>
+                        <div class="process-desc">Genera informes de gestión y los envía a tus clientes</div>
+                        <div class="process-price">500€</div>
+                        <div class="process-savings">Ahorras 12h/mes</div>
+                    </div>
+                    
+                    <div class="process-item" data-price="700" data-savings="18" onclick="toggleProcess(this)">
+                        <div class="process-name">Gestión de nóminas</div>
+                        <div class="process-desc">Procesa y envía nóminas automáticamente cada mes</div>
+                        <div class="process-price">700€</div>
+                        <div class="process-savings">Ahorras 18h/mes</div>
+                    </div>
+                </div>
+                
+                <div class="calculator-summary">
+                    <div class="total-price">0€</div>
+                    <div class="total-savings">Ahorras 0 horas/mes</div>
+                    <div class="roi-text">ROI: Recuperas la inversión en <span id="roi-months">-</span> meses</div>
+                </div>
+                
+                <button class="calculator-cta" id="calculator-cta" onclick="openCalendar()" disabled>
+                    Solicitar presupuesto personalizado
+                </button>
             </div>
         </div>
     </section>
@@ -1666,6 +1923,50 @@
                }
            });
        });
+
+       // Calculator functionality
+        function showCalculator() {
+            const calculator = document.getElementById('calculator');
+            calculator.classList.add('active');
+            calculator.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            trackEvent('calculator_opened');
+        }
+
+        function toggleProcess(element) {
+            element.classList.toggle('selected');
+            updateCalculatorSummary();
+            trackEvent('process_selected');
+        }
+
+        function updateCalculatorSummary() {
+            const selectedItems = document.querySelectorAll('.process-item.selected');
+            let totalPrice = 0;
+            let totalSavings = 0;
+            
+            selectedItems.forEach(item => {
+                totalPrice += parseInt(item.dataset.price);
+                totalSavings += parseInt(item.dataset.savings);
+            });
+            
+            // Update display
+            document.querySelector('.total-price').textContent = totalPrice + '€';
+            document.querySelector('.total-savings').textContent = `Ahorras ${totalSavings} horas/mes`;
+            
+            // Calculate ROI (assuming 25€/hour cost)
+            const monthlySavings = totalSavings * 25;
+            const roiMonths = totalPrice > 0 ? Math.ceil(totalPrice / monthlySavings) : 0;
+            document.getElementById('roi-months').textContent = totalPrice > 0 ? roiMonths : '-';
+            
+            // Enable/disable CTA
+            const ctaButton = document.getElementById('calculator-cta');
+            if (selectedItems.length > 0) {
+                ctaButton.disabled = false;
+                ctaButton.textContent = `Solicitar presupuesto de ${totalPrice}€`;
+            } else {
+                ctaButton.disabled = true;
+                ctaButton.textContent = 'Solicitar presupuesto personalizado';
+            }
+        }
 
        // Exit intent detection (simplified)
        document.addEventListener('mouseleave', function(e) {
