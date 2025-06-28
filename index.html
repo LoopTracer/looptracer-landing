@@ -693,6 +693,8 @@
             font-size: 1.3rem;
             color: white;
             transition: all 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .modal-close:hover {
@@ -2198,9 +2200,12 @@
         }
 
         function closeCalculator() {
-        const modal = document.getElementById('calculatorModal');
-        modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
+            const modal = document.getElementById('calculatorModal');
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 400);
+            document.body.style.overflow = 'auto';
         }
 
         function toggleProcess(element) {
