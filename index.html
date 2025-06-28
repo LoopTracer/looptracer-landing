@@ -2147,28 +2147,32 @@
         bottom: 0;
         right: 0;
         left: 0;
+        top: 0;
         width: 100%;
         max-width: 100%;
-        height: 100vh;
+        height: 100%;
         border-radius: 0;
         border: none;
-
-        /* Extra: asegúrate de respetar áreas seguras */
+        overflow: hidden;
         padding-top: env(safe-area-inset-top);
-        overflow: hidden; /* Evita scrolls raros */
+    }
+
+    .chat-widget > * {
+        position: absolute;
+        inset: 0; /* top, right, bottom, left = 0 */
+        display: flex;
+        flex-direction: column;
     }
 
     .chat-header {
         border-radius: 0;
-
-        /* Nuevo: deja aire arriba para que la X no quede pegada */
         padding-top: calc(16px + env(safe-area-inset-top));
-        z-index: 99999; /* Para que quede encima de todo */
+        z-index: 99999;
     }
 
     .chat-close {
-        z-index: 99999; /* Botón cerrar siempre por encima */
-        position: relative; /* Asegura que el z-index funcione */
+        z-index: 99999;
+        position: relative;
     }
     }
     </style>
