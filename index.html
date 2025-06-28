@@ -1896,6 +1896,453 @@
         💬 Diagnóstico gratis
     </a>
 
+    <!-- CHAT WIDGET START -->
+    <!-- Contenedor del chatbox, inicialmente oculto -->
+    <div id="chatWidget" class="chat-widget">
+    <!-- Header con título y botón cerrar -->
+    <div class="chat-header">
+        <span class="chat-title">💬 Diagnóstico IA</span>
+        <button class="chat-close" id="chatClose">✕</button>
+    </div>
+    
+    <!-- Área de mensajes con scroll automático -->
+    <div class="chat-log" id="chatLog">
+        <div class="chat-message bot-message">
+        ¡Hola! 👋 Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?
+        </div>
+    </div>
+    
+    <!-- Input area con textarea y botón enviar -->
+    <div class="chat-input-area">
+        <textarea 
+        id="chatInput" 
+        class="chat-input" 
+        placeholder="Escribe tu mensaje..."
+        rows="1"
+        ></textarea>
+        <button class="chat-send" id="chatSend">✈️</button>
+    </div>
+    </div>
+
+    <style>
+    /* Variables CSS para fácil personalización de colores */
+    :root {
+    --user-bg: #e8e8e8;
+    --user-text: #000;
+    --bot-bg: #0066ff;
+    --bot-text: #fff;
+    --widget-bg: #ffffff;
+    --border-color: #e0e0e0;
+    --shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    /* Contenedor principal del chat widget */
+    .chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 360px;
+    height: 420px;
+    background: var(--widget-bg);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    display: none;
+    flex-direction: column;
+    z-index: 9999;
+    font-family: inherit;
+    }
+
+    /* Animación de aparición con fade y slide */
+    .chat-widget.show {
+    display: flex;
+    animation: chatSlideIn 0.3s ease-out;
+    }
+
+    @keyframes chatSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    }
+
+    /* Header del chat con título y botón cerrar */
+    .chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border-color);
+    border-radius: 12px 12px 0 0;
+    background: var(--widget-bg);
+    }
+
+    .chat-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+    }
+
+    .chat-close {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #666;
+    padding: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+    }
+
+    .chat-close:hover {
+    background-color: #f5f5f5;
+    }
+
+    /* Área de mensajes con scroll automático */
+    .chat-log {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    }
+
+    .chat-log::-webkit-scrollbar {
+    width: 4px;
+    }
+
+    .chat-log::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+
+    .chat-log::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 2px;
+    }
+
+    /* Estilos para burbujas de mensajes */
+    .chat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+    animation: messageSlideIn 0.3s ease-out;
+    }
+
+    @keyframes messageSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    }
+
+    /* Burbuja del usuario (derecha, gris) */
+    .user-message {
+    align-self: flex-end;
+    background: var(--user-bg);
+    color: var(--user-text);
+    border-bottom-right-radius: 6px;
+    }
+
+    /* Burbuja del bot/IA (izquierda, azul) */
+    .bot-message {
+    align-self: flex-start;
+    background: var(--bot-bg);
+    color: var(--bot-text);
+    border-bottom-left-radius: 6px;
+    }
+
+    /* Mensaje de error (rojo) */
+    .error-message {
+    align-self: flex-start;
+    background: #ff4444;
+    color: white;
+    border-bottom-left-radius: 6px;
+    }
+
+    /* Animación de "IA escribiendo..." */
+    .typing-indicator {
+    align-self: flex-start;
+    background: var(--bot-bg);
+    color: var(--bot-text);
+    border-bottom-left-radius: 6px;
+    font-style: italic;
+    }
+
+    .typing-dots {
+    display: inline-block;
+    animation: typingDots 1.5s infinite;
+    }
+
+    @keyframes typingDots {
+    0%, 60%, 100% { opacity: 0.3; }
+    30% { opacity: 1; }
+    }
+
+    /* Área de input con textarea y botón */
+    .chat-input-area {
+    display: flex;
+    align-items: flex-end;
+    padding: 16px;
+    border-top: 1px solid var(--border-color);
+    gap: 8px;
+    }
+
+    .chat-input {
+    flex: 1;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    min-height: 40px;
+    max-height: 80px;
+    transition: border-color 0.2s;
+    }
+
+    .chat-input:focus {
+    border-color: var(--bot-bg);
+    }
+
+    .chat-send {
+    background: var(--bot-bg);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    }
+
+    .chat-send:hover:not(:disabled) {
+    background: #0052cc;
+    }
+
+    .chat-send:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    }
+
+    /* Responsive: en móvil ocupa toda la pantalla */
+    @media (max-width: 600px) {
+    .chat-widget {
+        bottom: 0;
+        right: 0;
+        left: 0;
+        width: 100%;
+        max-width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        border: none;
+    }
+    
+    .chat-header {
+        border-radius: 0;
+    }
+    }
+    </style>
+
+    <script>
+    // Variables globales para el chat widget
+    let isTyping = false;
+    const API_ENDPOINT = 'https://TU_DOMINIO_N8N/webhook/chat';
+
+    // Genera o recupera sessionId del localStorage para mantener contexto
+    function getSessionId() {
+    let sessionId = localStorage.getItem('chatSessionId');
+    if (!sessionId) {
+        // Genera UUID v4 simple
+        sessionId = 'xxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+        });
+        localStorage.setItem('chatSessionId', sessionId);
+    }
+    return sessionId;
+    }
+
+    // Formatea mensaje y devuelve HTML de la burbuja
+    function formatMessage(text, role) {
+    const messageClass = role === 'user' ? 'user-message' : 'bot-message';
+    return `<div class="chat-message ${messageClass}">${text}</div>`;
+    }
+
+    // Scroll automático al último mensaje
+    function scrollToBottom() {
+    const chatLog = document.getElementById('chatLog');
+    chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    // Muestra indicador de "IA escribiendo..."
+    function showTypingIndicator() {
+    const chatLog = document.getElementById('chatLog');
+    const typingHtml = `<div class="chat-message typing-indicator" id="typingIndicator">
+        IA escribiendo<span class="typing-dots">...</span>
+    </div>`;
+    chatLog.insertAdjacentHTML('beforeend', typingHtml);
+    scrollToBottom();
+    }
+
+    // Remueve indicador de escritura
+    function removeTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) {
+        indicator.remove();
+    }
+    }
+
+    // Envía mensaje al webhook y maneja respuesta
+    async function sendMessage(message) {
+    const chatLog = document.getElementById('chatLog');
+    const chatInput = document.getElementById('chatInput');
+    const sendButton = document.getElementById('chatSend');
+    
+    try {
+        // Bloquea input y botón
+        chatInput.disabled = true;
+        sendButton.disabled = true;
+        isTyping = true;
+        
+        // Añade mensaje del usuario
+        chatLog.insertAdjacentHTML('beforeend', formatMessage(message, 'user'));
+        scrollToBottom();
+        
+        // Muestra indicador de escritura
+        showTypingIndicator();
+        
+        // Hace petición al webhook
+        const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            question: message,
+            sessionId: getSessionId()
+        })
+        });
+        
+        // Remueve indicador de escritura
+        removeTypingIndicator();
+        
+        if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const answer = data.answer || 'Lo siento, no pude procesar tu mensaje.';
+        
+        // Añade respuesta de la IA
+        chatLog.insertAdjacentHTML('beforeend', formatMessage(answer, 'bot'));
+        
+    } catch (error) {
+        // Remueve indicador y muestra error
+        removeTypingIndicator();
+        chatLog.insertAdjacentHTML('beforeend', 
+        '<div class="chat-message error-message">Lo siento, hubo un error. Prueba otra vez.</div>'
+        );
+        console.error('Error enviando mensaje:', error);
+        
+    } finally {
+        // Desbloquea input y botón
+        chatInput.disabled = false;
+        sendButton.disabled = false;
+        isTyping = false;
+        scrollToBottom();
+        
+        // Limpia y enfoca input
+        chatInput.value = '';
+        chatInput.style.height = 'auto';
+        chatInput.focus();
+    }
+    }
+
+    // Maneja envío de mensaje (validación y llamada)
+    function handleSendMessage() {
+    const chatInput = document.getElementById('chatInput');
+    const message = chatInput.value.trim();
+    
+    if (message && !isTyping) {
+        sendMessage(message);
+    }
+    }
+
+    // Auto-resize del textarea según contenido (máx 3 líneas)
+    function autoResizeTextarea(textarea) {
+    textarea.style.height = 'auto';
+    const maxHeight = parseInt(getComputedStyle(textarea).lineHeight) * 3;
+    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
+    }
+
+    // Inicialización cuando el DOM esté listo
+    document.addEventListener('DOMContentLoaded', function() {
+    const floatingCTA = document.getElementById('floatingCTA');
+    const chatWidget = document.getElementById('chatWidget');
+    const chatClose = document.getElementById('chatClose');
+    const chatInput = document.getElementById('chatInput');
+    const chatSend = document.getElementById('chatSend');
+    
+    // Abre el chat al hacer clic en el botón flotante
+    if (floatingCTA) {
+        floatingCTA.addEventListener('click', function(e) {
+        e.preventDefault();
+        chatWidget.classList.add('show');
+        chatInput.focus();
+        });
+    }
+    
+    // Cierra el chat
+    chatClose.addEventListener('click', function() {
+        chatWidget.classList.remove('show');
+    });
+    
+    // Envío con botón
+    chatSend.addEventListener('click', handleSendMessage);
+    
+    // Manejo de teclas en textarea: Enter envía, Shift+Enter nueva línea
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendMessage();
+        }
+    });
+    
+    // Auto-resize del textarea
+    chatInput.addEventListener('input', function() {
+        autoResizeTextarea(this);
+    });
+    
+    // Cierra chat al hacer clic fuera (opcional)
+    document.addEventListener('click', function(e) {
+        if (chatWidget.classList.contains('show') && 
+            !chatWidget.contains(e.target) && 
+            !floatingCTA.contains(e.target)) {
+        chatWidget.classList.remove('show');
+        }
+    });
+    });
+    </script>
+    <!-- CHAT WIDGET END -->
+
      <!-- MODAL OVERLAY + CONTENIDO -->
     <div class="modal-overlay" id="calculatorModal">
     <div class="calculator-modal">
