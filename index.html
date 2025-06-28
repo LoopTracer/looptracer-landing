@@ -1901,7 +1901,7 @@
     <div id="chatWidget" class="chat-widget">
     <!-- Header con título y botón cerrar -->
     <div class="chat-header">
-        <span class="chat-title">🤖 Diagnóstico IA</span>
+        <span class="chat-title">🤖 LoopTracer IA</span>
         <button class="chat-close" id="chatClose">✕</button>
     </div>
     
@@ -2142,39 +2142,35 @@
     }
 
     /* Responsive: en móvil ocupa toda la pantalla */
-    @media (max-width: 600px) {
-    .chat-widget {
-        bottom: 0;
-        right: 0;
-        left: 0;
-        top: 0;
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        border-radius: 0;
-        border: none;
-        overflow: hidden;
-        padding-top: env(safe-area-inset-top);
-    }
+@media (max-width: 600px) {
+  .chat-widget {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    border-radius: 0;
+    border: none;
 
-    .chat-widget > * {
-        position: absolute;
-        inset: 0; /* top, right, bottom, left = 0 */
-        display: flex;
-        flex-direction: column;
-    }
+    /* Extra: asegúrate de respetar áreas seguras */
+    padding-top: env(safe-area-inset-top);
+    overflow: hidden; /* Evita scrolls raros */
+  }
 
-    .chat-header {
-        border-radius: 0;
-        padding-top: calc(16px + env(safe-area-inset-top));
-        z-index: 99999;
-    }
+  .chat-header {
+    border-radius: 0;
 
-    .chat-close {
-        z-index: 99999;
-        position: relative;
-    }
-    }
+    /* Nuevo: deja aire arriba para que la X no quede pegada */
+    padding-top: calc(16px + env(safe-area-inset-top));
+    z-index: 99999; /* Para que quede encima de todo */
+  }
+
+  .chat-close {
+    z-index: 99999; /* Botón cerrar siempre por encima */
+    position: relative; /* Asegura que el z-index funcione */
+  }
+}
     </style>
 
     <script>
