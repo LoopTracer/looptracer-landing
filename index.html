@@ -2471,6 +2471,19 @@
            }
        }
 
+       // Floating CTA visibility
+       window.addEventListener('scroll', function() {
+           const floatingCTA = document.getElementById('floatingCTA');
+           const heroSection = document.querySelector('.hero');
+           const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+           
+           if (window.scrollY > heroBottom) {
+               floatingCTA.classList.add('visible');
+           } else {
+               floatingCTA.classList.remove('visible');
+           }
+       });
+
        // Smooth scrolling for anchor links
        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
            anchor.addEventListener('click', function (e) {
