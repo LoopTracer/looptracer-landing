@@ -1893,7 +1893,7 @@
 
     <!-- Floating CTA -->
     <a href="#cta" class="floating-cta" id="floatingCTA">
-        🤖 Ayuda
+        🤖 ¿Necesitas ayuda?
     </a>
 
     <!-- CHAT WIDGET START -->
@@ -1901,7 +1901,7 @@
     <div id="chatWidget" class="chat-widget">
     <!-- Header con título y botón cerrar -->
     <div class="chat-header">
-        <span class="chat-title">💬 Diagnóstico IA</span>
+        <span class="chat-title">🤖 Diagnóstico IA</span>
         <button class="chat-close" id="chatClose">✕</button>
     </div>
     
@@ -2470,19 +2470,6 @@
                icon.textContent = '−';
            }
        }
-
-       // Floating CTA visibility
-       window.addEventListener('scroll', function() {
-           const floatingCTA = document.getElementById('floatingCTA');
-           const heroSection = document.querySelector('.hero');
-           const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-           
-           if (window.scrollY > heroBottom) {
-               floatingCTA.classList.add('visible');
-           } else {
-               floatingCTA.classList.remove('visible');
-           }
-       });
 
        // Smooth scrolling for anchor links
        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
