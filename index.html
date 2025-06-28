@@ -1892,7 +1892,7 @@
     </footer>
 
     <!-- Floating CTA -->
-    <a href="#cta" class="floating-cta" id="floatingCTA">
+    <a href="javascript:void(0)" class="floating-cta" id="floatingCTA">
         🤖 ¿Ayuda?
     </a>
 
@@ -2152,10 +2152,23 @@
         height: 100vh;
         border-radius: 0;
         border: none;
+
+        /* Extra: asegúrate de respetar áreas seguras */
+        padding-top: env(safe-area-inset-top);
+        overflow: hidden; /* Evita scrolls raros */
     }
-    
+
     .chat-header {
         border-radius: 0;
+
+        /* Nuevo: deja aire arriba para que la X no quede pegada */
+        padding-top: calc(16px + env(safe-area-inset-top));
+        z-index: 99999; /* Para que quede encima de todo */
+    }
+
+    .chat-close {
+        z-index: 99999; /* Botón cerrar siempre por encima */
+        position: relative; /* Asegura que el z-index funcione */
     }
     }
     </style>
