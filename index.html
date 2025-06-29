@@ -2142,14 +2142,6 @@
     }
 
     @media (max-width: 600px) {
-        /* Prevenir scroll del body cuando el chat está abierto */
-        body.chat-open {
-            overflow: hidden;
-            position: fixed;
-            width: 100%;
-            height: 100%;
-        }
-
         .chat-widget {
             bottom: 0;
             right: 0;
@@ -2157,97 +2149,124 @@
             width: 100%;
             max-width: 100%;
             height: 100vh;
+            height: 100dvh; /* Altura dinámica del viewport */
             border-radius: 0;
             border: none;
             position: fixed;
             overflow: hidden;
-            /* NUEVO: Layout específico para móvil */
-            display: block; /* Cambiamos de flex a block */
+            z-index: 10000;
         }
 
-        /* HEADER COMPLETAMENTE FIJO */
+        /* Header fijo en la parte superior */
         .chat-header {
-            position: fixed;
+            position: relative; /* Cambiado de fixed a relative */
             top: 0;
             left: 0;
             right: 0;
-            height: 60px; /* Altura fija */
+            height: 60px;
             border-radius: 0;
             padding: 16px 20px;
-            z-index: 10001;
             background: var(--widget-bg);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-bottom: 1px solid var(--border-color);
-            /* NUEVO: Centramos el contenido verticalmente */
-            display: flex;
-            align-items: center;
+            flex-shrink: 0; /* Importante: no se reduce */
+            z-index: 1;
         }
 
-        /* INPUT AREA COMPLETAMENTE FIJA */
-        .chat-input-area {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: auto;
-            min-height: 70px; /* Altura mínima */
-            background: var(--widget-bg);
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
-            z-index: 10001;
-            border-top: 1px solid var(--border-color);
-            /* NUEVO: Padding para seguridad en dispositivos con notch */
-            padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
-        }
-
-        /* ÁREA DE MENSAJES CON ALTURA CALCULADA */
+        /* Área de mensajes que se adapta al espacio disponible */
         .chat-log {
-            position: fixed;
-            top: 60px; /* Altura del header */
-            bottom: 70px; /* Altura mínima del input */
-            left: 0;
-            right: 0;
+            flex: 1; /* Ocupa todo el espacio disponible */
             overflow-y: auto;
             overflow-x: hidden;
             padding: 16px;
-            /* NUEVO: Espaciado adicional para el mensaje de bienvenida */
-            padding-top: 24px;
+            background: var(--widget-bg);
             scroll-behavior: smooth;
-            overscroll-behavior: contain;
-            /* NUEVO: Fondo para evitar transparencias */
-            background: var(--widget-bg);
+            -webkit-overflow-scrolling: touch;
         }
 
-        /* NUEVO: Estilos especiales para el mensaje de bienvenida */
-        .welcome-message {
-            position: sticky;
-            top: 0;
+        /* Input area fija en la parte inferior */
+        .chat-input-area {
+            position: relative; /* Cambiado de fixed a relative */
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: var(--widget-bg);
-            padding: 12px 0;
-            margin-bottom: 16px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            z-index: 100;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+            border-top: 1px solid var(--border-color);
+            padding: 16px;
+            padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            flex-shrink: 0; /* Importante: no se reduce */
+            z-index: 1;
         }
 
-        /* Ajuste del textarea en móvil */
+        /* Ajustes del input para móvil */
         .chat-input {
-            font-size: 16px; /* Evitar zoom en iOS */
+            font-size: 16px; /* Evita zoom en iOS */
             min-height: 44px;
-            max-height: 44px; /* Forzamos altura fija en móvil */
-            resize: none;
+            max-height: 44px; /* Altura fija en móvil */
+            border-radius: 22px;
         }
 
-        /* NUEVO: Ajustamos el botón de envío */
         .chat-send {
-            flex-shrink: 0;
             width: 44px;
             height: 44px;
+            flex-shrink: 0;
         }
 
-        /* NUEVO: Espaciado final para evitar que el último mensaje quede oculto */
-        .chat-log::after {
-            content: '';
-            display: block;
-            height: 20px;
+        /* Mensaje de bienvenida normal en móvil */
+        .welcome-message {
+            position: relative; /* Cambiado de sticky a relative */
+            background: var(--bot-bg);
+            color: var(--bot-text);
+            padding: 10px 14px;
+            border-radius: 18px;
+            border-bottom-left-radius: 6px;
+            margin-bottom: 12px;
+        }
+
+        /* Prevenir scroll del body cuando el chat está abierto */
+        body.chat-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        /* Asegurar que el chat tenga prioridad visual */
+        .chat-widget.show {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    /* Estilos para el botón flotante */
+    .floating-cta {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--bot-bg);
+        color: white;
+        padding: 12px 16px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        box-shadow: var(--shadow);
+        z-index: 9998;
+        transition: all 0.3s ease;
+    }
+
+    .floating-cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 600px) {
+        .floating-cta {
+            bottom: 16px;
+            right: 16px;
         }
     }
     </style>
@@ -2281,7 +2300,9 @@
     // Scroll automático al último mensaje
     function scrollToBottom() {
     const chatLog = document.getElementById('chatLog');
-    chatLog.scrollTop = chatLog.scrollHeight;
+    setTimeout(() => {
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }, 100);
     }
 
     // Muestra indicador de "IA escribiendo..."
@@ -2308,7 +2329,7 @@
         const chatInput = document.getElementById('chatInput');
         const sendButton = document.getElementById('chatSend');
         
-        // NUEVO: Ocultar mensaje de bienvenida después del primer mensaje
+        // Ocultar mensaje de bienvenida después del primer mensaje
         const welcomeMessage = document.getElementById('welcomeMessage');
         if (welcomeMessage) {
             welcomeMessage.style.display = 'none';
@@ -2374,7 +2395,7 @@
         }
     }
 
-    // NUEVA FUNCIÓN: Restaurar mensaje de bienvenida al abrir el chat
+    // Restaurar mensaje de bienvenida al abrir el chat
     function resetWelcomeMessage() {
         const welcomeMessage = document.getElementById('welcomeMessage');
         const chatLog = document.getElementById('chatLog');
@@ -2420,9 +2441,10 @@
                 if (window.innerWidth <= 600) {
                     document.body.classList.add('chat-open');
                 }
-                // NUEVO: Restaurar mensaje de bienvenida si es necesario
                 resetWelcomeMessage();
-                chatInput.focus();
+                setTimeout(() => {
+                    chatInput.focus();
+                }, 300);
             });
         }
         
@@ -2443,7 +2465,7 @@
             }
         });
         
-        // Auto-resize del textarea (DESHABILITADO en móvil)
+        // Auto-resize del textarea (solo desktop)
         chatInput.addEventListener('input', function() {
             if (window.innerWidth > 600) {
                 autoResizeTextarea(this);
@@ -2461,12 +2483,23 @@
             }
         });
 
-        // Manejar cambios de orientación
+        // Manejar cambios de orientación y resize
+        let resizeTimeout;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
+                    scrollToBottom();
+                }
+            }, 150);
+        });
+
+        // Específico para orientationchange en dispositivos móviles
         window.addEventListener('orientationchange', function() {
             if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
                 setTimeout(() => {
                     scrollToBottom();
-                }, 200);
+                }, 500);
             }
         });
     });
