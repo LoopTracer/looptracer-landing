@@ -1907,8 +1907,8 @@
     
     <!-- Área de mensajes con scroll automático -->
     <div class="chat-log" id="chatLog">
-        <div class="chat-message bot-message">
-        ¡Hola! 👋 Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?
+        <div class="chat-message bot-message welcome-message" id="welcomeMessage">
+            ¡Hola! 👋 Soy tu asistente de IA. ¿En qué puedo ayudarte hoy?
         </div>
     </div>
     
@@ -2141,9 +2141,8 @@
     cursor: not-allowed;
     }
 
-    /* Responsive: en móvil ocupa toda la pantalla */
     @media (max-width: 600px) {
-        /* NUEVO: Prevenir scroll del body cuando el chat está abierto */
+        /* Prevenir scroll del body cuando el chat está abierto */
         body.chat-open {
             overflow: hidden;
             position: fixed;
@@ -2157,63 +2156,98 @@
             left: 0;
             width: 100%;
             max-width: 100%;
-            /* CAMBIADO: Usamos altura fija que se adapte al teclado */
             height: 100vh;
-            height: 100svh; /* Small viewport height - se adapta al teclado */
             border-radius: 0;
             border: none;
-            /* NUEVO: Posición fija para evitar que se mueva con el teclado */
             position: fixed;
-            /* NUEVO: Prevenir scroll en el contenedor */
             overflow: hidden;
+            /* NUEVO: Layout específico para móvil */
+            display: block; /* Cambiamos de flex a block */
         }
 
+        /* HEADER COMPLETAMENTE FIJO */
         .chat-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px; /* Altura fija */
             border-radius: 0;
             padding: 16px 20px;
-            /* NUEVO: Fijo en la parte superior */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            z-index: 10001;
             background: var(--widget-bg);
-            /* NUEVO: Sombra para separar del contenido */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            border-bottom: 1px solid var(--border-color);
+            /* NUEVO: Centramos el contenido verticalmente */
+            display: flex;
+            align-items: center;
         }
 
-        /* NUEVO: Ajuste del área de mensajes */
+        /* INPUT AREA COMPLETAMENTE FIJA */
+        .chat-input-area {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: auto;
+            min-height: 70px; /* Altura mínima */
+            background: var(--widget-bg);
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.15);
+            z-index: 10001;
+            border-top: 1px solid var(--border-color);
+            /* NUEVO: Padding para seguridad en dispositivos con notch */
+            padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+        }
+
+        /* ÁREA DE MENSAJES CON ALTURA CALCULADA */
         .chat-log {
-            /* IMPORTANTE: Altura calculada descontando header y input */
-            height: calc(100vh - 140px); /* Aprox: 70px header + 70px input area */
-            height: calc(100svh - 140px);
-            min-height: 0;
-            flex: none; /* Cambiado de flex: 1 */
-            /* NUEVO: Control específico del scroll */
+            position: fixed;
+            top: 60px; /* Altura del header */
+            bottom: 70px; /* Altura mínima del input */
+            left: 0;
+            right: 0;
             overflow-y: auto;
             overflow-x: hidden;
-            /* NUEVO: Scroll suave */
+            padding: 16px;
+            /* NUEVO: Espaciado adicional para el mensaje de bienvenida */
+            padding-top: 24px;
             scroll-behavior: smooth;
-            /* NUEVO: Evitar que el scroll se propague */
             overscroll-behavior: contain;
-        }
-
-        /* NUEVO: Input fijo en la parte inferior */
-        .chat-input-area {
-            position: sticky;
-            bottom: 0;
+            /* NUEVO: Fondo para evitar transparencias */
             background: var(--widget-bg);
-            /* NUEVO: Sombra para separar del contenido */
-            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-            z-index: 1000;
-            /* NUEVO: Evitar que se encoja */
-            flex-shrink: 0;
         }
 
-        /* NUEVO: Ajuste del textarea en móvil */
+        /* NUEVO: Estilos especiales para el mensaje de bienvenida */
+        .welcome-message {
+            position: sticky;
+            top: 0;
+            background: var(--widget-bg);
+            padding: 12px 0;
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 100;
+        }
+
+        /* Ajuste del textarea en móvil */
         .chat-input {
-            /* NUEVO: Evitar zoom en iOS */
-            font-size: 16px;
-            /* NUEVO: Altura mínima más pequeña en móvil */
+            font-size: 16px; /* Evitar zoom en iOS */
             min-height: 44px;
+            max-height: 44px; /* Forzamos altura fija en móvil */
+            resize: none;
+        }
+
+        /* NUEVO: Ajustamos el botón de envío */
+        .chat-send {
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+        }
+
+        /* NUEVO: Espaciado final para evitar que el último mensaje quede oculto */
+        .chat-log::after {
+            content: '';
+            display: block;
+            height: 20px;
         }
     }
     </style>
@@ -2270,68 +2304,86 @@
 
     // Envía mensaje al webhook y maneja respuesta
     async function sendMessage(message) {
-    const chatLog = document.getElementById('chatLog');
-    const chatInput = document.getElementById('chatInput');
-    const sendButton = document.getElementById('chatSend');
-    
-    try {
-        // Bloquea input y botón
-        chatInput.disabled = true;
-        sendButton.disabled = true;
-        isTyping = true;
+        const chatLog = document.getElementById('chatLog');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('chatSend');
         
-        // Añade mensaje del usuario
-        chatLog.insertAdjacentHTML('beforeend', formatMessage(message, 'user'));
-        scrollToBottom();
-        
-        // Muestra indicador de escritura
-        showTypingIndicator();
-        
-        // Hace petición al webhook
-        const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            question: message,
-            sessionId: getSessionId()
-        })
-        });
-        
-        // Remueve indicador de escritura
-        removeTypingIndicator();
-        
-        if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+        // NUEVO: Ocultar mensaje de bienvenida después del primer mensaje
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        if (welcomeMessage) {
+            welcomeMessage.style.display = 'none';
         }
         
-        const data = await response.json();
-        const answer = data.answer || 'Lo siento, no pude procesar tu mensaje.';
-        
-        // Añade respuesta de la IA
-        chatLog.insertAdjacentHTML('beforeend', formatMessage(answer, 'bot'));
-        
-    } catch (error) {
-        // Remueve indicador y muestra error
-        removeTypingIndicator();
-        chatLog.insertAdjacentHTML('beforeend', 
-        '<div class="chat-message error-message">Lo siento, hubo un error. Prueba otra vez.</div>'
-        );
-        console.error('Error enviando mensaje:', error);
-        
-    } finally {
-        // Desbloquea input y botón
-        chatInput.disabled = false;
-        sendButton.disabled = false;
-        isTyping = false;
-        scrollToBottom();
-        
-        // Limpia y enfoca input
-        chatInput.value = '';
-        chatInput.style.height = 'auto';
-        chatInput.focus();
+        try {
+            // Bloquea input y botón
+            chatInput.disabled = true;
+            sendButton.disabled = true;
+            isTyping = true;
+            
+            // Añade mensaje del usuario
+            chatLog.insertAdjacentHTML('beforeend', formatMessage(message, 'user'));
+            scrollToBottom();
+            
+            // Muestra indicador de escritura
+            showTypingIndicator();
+            
+            // Hace petición al webhook
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    question: message,
+                    sessionId: getSessionId()
+                })
+            });
+            
+            // Remueve indicador de escritura
+            removeTypingIndicator();
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const answer = data.answer || 'Lo siento, no pude procesar tu mensaje.';
+            
+            // Añade respuesta de la IA
+            chatLog.insertAdjacentHTML('beforeend', formatMessage(answer, 'bot'));
+            
+        } catch (error) {
+            // Remueve indicador y muestra error
+            removeTypingIndicator();
+            chatLog.insertAdjacentHTML('beforeend', 
+                '<div class="chat-message error-message">Lo siento, hubo un error. Prueba otra vez.</div>'
+            );
+            console.error('Error enviando mensaje:', error);
+            
+        } finally {
+            // Desbloquea input y botón
+            chatInput.disabled = false;
+            sendButton.disabled = false;
+            isTyping = false;
+            scrollToBottom();
+            
+            // Limpia y enfoca input
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+            chatInput.focus();
+        }
     }
+
+    // NUEVA FUNCIÓN: Restaurar mensaje de bienvenida al abrir el chat
+    function resetWelcomeMessage() {
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const chatLog = document.getElementById('chatLog');
+        
+        // Si no hay mensajes del usuario, mostrar mensaje de bienvenida
+        const userMessages = chatLog.querySelectorAll('.user-message');
+        if (userMessages.length === 0 && welcomeMessage) {
+            welcomeMessage.style.display = 'block';
+        }
     }
 
     // Maneja envío de mensaje (validación y llamada)
@@ -2364,10 +2416,12 @@
             floatingCTA.addEventListener('click', function(e) {
                 e.preventDefault();
                 chatWidget.classList.add('show');
-                // NUEVO: Prevenir scroll del body en móvil
+                // Prevenir scroll del body en móvil
                 if (window.innerWidth <= 600) {
                     document.body.classList.add('chat-open');
                 }
+                // NUEVO: Restaurar mensaje de bienvenida si es necesario
+                resetWelcomeMessage();
                 chatInput.focus();
             });
         }
@@ -2375,14 +2429,13 @@
         // Cierra el chat
         chatClose.addEventListener('click', function() {
             chatWidget.classList.remove('show');
-            // NUEVO: Restaurar scroll del body
             document.body.classList.remove('chat-open');
         });
         
         // Envío con botón
         chatSend.addEventListener('click', handleSendMessage);
         
-        // Manejo de teclas en textarea: Enter envía, Shift+Enter nueva línea
+        // Manejo de teclas en textarea
         chatInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -2390,29 +2443,30 @@
             }
         });
         
-        // Auto-resize del textarea
+        // Auto-resize del textarea (DESHABILITADO en móvil)
         chatInput.addEventListener('input', function() {
-            autoResizeTextarea(this);
+            if (window.innerWidth > 600) {
+                autoResizeTextarea(this);
+            }
         });
         
-        // Cierra chat al hacer clic fuera (opcional) - MODIFICADO para móvil
+        // Cierra chat al hacer clic fuera (solo desktop)
         document.addEventListener('click', function(e) {
             if (chatWidget.classList.contains('show') && 
                 !chatWidget.contains(e.target) && 
                 !floatingCTA.contains(e.target) &&
-                window.innerWidth > 600) { // Solo en desktop
+                window.innerWidth > 600) {
                 chatWidget.classList.remove('show');
                 document.body.classList.remove('chat-open');
             }
         });
 
-        // NUEVO: Manejar cambios de orientación en móvil
+        // Manejar cambios de orientación
         window.addEventListener('orientationchange', function() {
             if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
-                // Pequeño delay para que se ajuste la orientación
                 setTimeout(() => {
                     scrollToBottom();
-                }, 100);
+                }, 200);
             }
         });
 
