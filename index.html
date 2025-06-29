@@ -2149,44 +2149,29 @@
             width: 100%;
             max-width: 100%;
             height: 100vh;
-            height: 100dvh; /* Altura dinámica del viewport */
+            height: 100dvh;
             border-radius: 0;
             border: none;
             position: fixed;
             overflow: hidden;
             z-index: 10000;
-            transition: height 0.3s ease;
-        }
-
-        /* Clase especial cuando el teclado está activo */
-        .chat-widget.keyboard-active {
-            height: 100vh; /* Usa viewport height estático cuando hay teclado */
-            height: var(--viewport-height, 100vh); /* Variable CSS dinámica */
         }
 
         /* Header fijo en la parte superior */
         .chat-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            flex-shrink: 0;
             height: 60px;
             border-radius: 0;
             padding: 16px 20px;
             background: var(--widget-bg);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
-            z-index: 10002;
+            position: relative;
         }
 
-        /* Área de mensajes que se adapta dinámicamente */
+        /* Área de mensajes */
         .chat-log {
-            position: fixed;
-            top: 60px; /* Altura del header */
-            bottom: 76px; /* Altura del input area */
-            left: 0;
-            right: 0;
+            flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
             padding: 16px;
@@ -2197,10 +2182,7 @@
 
         /* Input area fija en la parte inferior */
         .chat-input-area {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            flex-shrink: 0;
             height: 76px;
             background: var(--widget-bg);
             box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
@@ -2209,14 +2191,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            z-index: 10002;
+            position: relative;
         }
 
         /* Ajustes del input para móvil */
         .chat-input {
-            font-size: 16px; /* Evita zoom en iOS */
+            font-size: 16px;
             min-height: 44px;
-            max-height: 44px; /* Altura fija en móvil */
+            max-height: 44px;
             border-radius: 22px;
             flex: 1;
         }
@@ -2227,16 +2209,6 @@
             flex-shrink: 0;
         }
 
-        /* Mensaje de bienvenida normal en móvil */
-        .welcome-message {
-            background: var(--bot-bg);
-            color: var(--bot-text);
-            padding: 10px 14px;
-            border-radius: 18px;
-            border-bottom-left-radius: 6px;
-            margin-bottom: 12px;
-        }
-
         /* Prevenir scroll del body cuando el chat está abierto */
         body.chat-open {
             overflow: hidden;
@@ -2245,25 +2217,6 @@
             height: 100%;
             top: 0;
             left: 0;
-        }
-
-        /* Asegurar que el chat tenga prioridad visual */
-        .chat-widget.show {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Ajustes específicos para cuando el teclado está activo */
-        .chat-widget.keyboard-active .chat-log {
-            bottom: 76px; /* Mantener espacio para input */
-        }
-
-        .chat-widget.keyboard-active .chat-input-area {
-            bottom: 0; /* Siempre pegado al fondo visible */
-        }
-
-        .chat-widget.keyboard-active .chat-header {
-            top: 0; /* Siempre pegado al tope visible */
         }
     }
 
@@ -2349,6 +2302,14 @@
     }
     }
 
+    // Cierra el teclado virtual en móviles
+    function closeKeyboard() {
+        const chatInput = document.getElementById('chatInput');
+        if (chatInput && window.innerWidth <= 600) {
+            chatInput.blur();
+        }
+    }
+
     // Envía mensaje al webhook y maneja respuesta
     async function sendMessage(message) {
         const chatLog = document.getElementById('chatLog');
@@ -2366,6 +2327,9 @@
             chatInput.disabled = true;
             sendButton.disabled = true;
             isTyping = true;
+            
+            // Cierra el teclado después de enviar
+            closeKeyboard();
             
             // Añade mensaje del usuario
             chatLog.insertAdjacentHTML('beforeend', formatMessage(message, 'user'));
@@ -2414,10 +2378,9 @@
             isTyping = false;
             scrollToBottom();
             
-            // Limpia y enfoca input
+            // Limpia input
             chatInput.value = '';
             chatInput.style.height = 'auto';
-            chatInput.focus();
         }
     }
 
@@ -2443,65 +2406,13 @@
     }
     }
 
-    // Auto-resize del textarea según contenido (máx 3 líneas)
+    // Auto-resize del textarea según contenido (máx 3 líneas) - solo desktop
     function autoResizeTextarea(textarea) {
-    textarea.style.height = 'auto';
-    const maxHeight = parseInt(getComputedStyle(textarea).lineHeight) * 3;
-    textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
+    if (window.innerWidth > 600) {
+        textarea.style.height = 'auto';
+        const maxHeight = parseInt(getComputedStyle(textarea).lineHeight) * 3;
+        textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px';
     }
-
-    // Función para detectar teclado virtual
-    function setupKeyboardDetection() {
-        if (window.innerWidth > 600) return; // Solo en móvil
-        
-        const chatWidget = document.getElementById('chatWidget');
-        let initialViewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-        let currentViewportHeight = initialViewportHeight;
-        
-        function handleViewportChange() {
-            if (!chatWidget.classList.contains('show')) return;
-        
-            const viewport = window.visualViewport || window;
-            const newHeight = viewport.height || window.innerHeight;
-            const heightDifference = initialViewportHeight - newHeight;
-            
-            // Si la diferencia es mayor a 150px, asumimos que el teclado está activo
-            if (heightDifference > 150) {
-                chatWidget.classList.add('keyboard-active');
-                // Establecer altura dinámica
-                document.documentElement.style.setProperty('--viewport-height', newHeight + 'px');
-            } else {
-                chatWidget.classList.remove('keyboard-active');
-                document.documentElement.style.setProperty('--viewport-height', initialViewportHeight + 'px');
-            }
-            
-            currentViewportHeight = newHeight;
-            
-            // Scroll al final después del cambio
-            setTimeout(() => {
-                scrollToBottom();
-            }, 100);
-        }
-        
-        // Escuchar cambios en el Visual Viewport API (moderno)
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', handleViewportChange);
-        }
-        
-        // Fallback para navegadores que no soportan Visual Viewport
-        window.addEventListener('resize', function() {
-            if (window.innerWidth <= 600) {
-                handleViewportChange();
-            }
-        });
-        
-        // Actualizar altura inicial cuando se redimensiona la ventana
-        window.addEventListener('orientationchange', function() {
-            setTimeout(() => {
-                initialViewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-                handleViewportChange();
-            }, 500);
-        });
     }
 
     // Inicialización cuando el DOM esté listo
@@ -2511,9 +2422,6 @@
         const chatClose = document.getElementById('chatClose');
         const chatInput = document.getElementById('chatInput');
         const chatSend = document.getElementById('chatSend');
-        
-        // Configurar detección de teclado
-        setupKeyboardDetection();
         
         // Abre el chat al hacer clic en el botón flotante
         if (floatingCTA) {
@@ -2525,17 +2433,21 @@
                     document.body.classList.add('chat-open');
                 }
                 resetWelcomeMessage();
-                setTimeout(() => {
-                    chatInput.focus();
-                }, 300);
+                // NO auto-focus en móvil para evitar apertura automática del teclado
+                if (window.innerWidth > 600) {
+                    setTimeout(() => {
+                        chatInput.focus();
+                    }, 300);
+                }
             });
         }
         
         // Cierra el chat
         chatClose.addEventListener('click', function() {
             chatWidget.classList.remove('show');
-            chatWidget.classList.remove('keyboard-active');
             document.body.classList.remove('chat-open');
+            // Asegurar que el teclado se cierre
+            closeKeyboard();
         });
         
         // Envío con botón
@@ -2549,28 +2461,9 @@
             }
         });
         
-        // Auto-resize del textarea (solo desktop)
+        // Auto-resize del textarea solo en desktop
         chatInput.addEventListener('input', function() {
-            if (window.innerWidth > 600) {
-                autoResizeTextarea(this);
-            }
-        });
-        
-        // Eventos específicos para manejar el teclado virtual
-        chatInput.addEventListener('focus', function() {
-            if (window.innerWidth <= 600) {
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 300);
-            }
-        });
-        
-        chatInput.addEventListener('blur', function() {
-            if (window.innerWidth <= 600) {
-                setTimeout(() => {
-                    chatWidget.classList.remove('keyboard-active');
-                }, 300);
-            }
+            autoResizeTextarea(this);
         });
         
         // Cierra chat al hacer clic fuera (solo desktop)
@@ -2584,15 +2477,13 @@
             }
         });
 
-        // Manejar cambios de orientación y resize
-        let resizeTimeout;
-        window.addEventListener('resize', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
+        // Manejar cambios de orientación
+        window.addEventListener('orientationchange', function() {
+            setTimeout(() => {
+                if (chatWidget.classList.contains('show')) {
                     scrollToBottom();
                 }
-            }, 150);
+            }, 500);
         });
     });
     </script>
