@@ -2143,29 +2143,78 @@
 
     /* Responsive: en móvil ocupa toda la pantalla */
     @media (max-width: 600px) {
-    .chat-widget {
-        bottom: 0;
-        right: 0;
-        left: 0;
-        width: 100%;
-        max-width: 100%;
-        height: 100%;
-        border-radius: 0;
-        border: none;
-    }
+        /* NUEVO: Prevenir scroll del body cuando el chat está abierto */
+        body.chat-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
 
-    .chat-header {
-        border-radius: 0;
-        padding: 16px 20px;
-    }
+        .chat-widget {
+            bottom: 0;
+            right: 0;
+            left: 0;
+            width: 100%;
+            max-width: 100%;
+            /* CAMBIADO: Usamos altura fija que se adapte al teclado */
+            height: 100vh;
+            height: 100svh; /* Small viewport height - se adapta al teclado */
+            border-radius: 0;
+            border: none;
+            /* NUEVO: Posición fija para evitar que se mueva con el teclado */
+            position: fixed;
+            /* NUEVO: Prevenir scroll en el contenedor */
+            overflow: hidden;
+        }
 
-    .chat-log {
-        min-height: 0;
-        flex: 1;
-    }
+        .chat-header {
+            border-radius: 0;
+            padding: 16px 20px;
+            /* NUEVO: Fijo en la parte superior */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--widget-bg);
+            /* NUEVO: Sombra para separar del contenido */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
 
-    .chat-input-area {
-        flex-shrink: 0;
+        /* NUEVO: Ajuste del área de mensajes */
+        .chat-log {
+            /* IMPORTANTE: Altura calculada descontando header y input */
+            height: calc(100vh - 140px); /* Aprox: 70px header + 70px input area */
+            height: calc(100svh - 140px);
+            min-height: 0;
+            flex: none; /* Cambiado de flex: 1 */
+            /* NUEVO: Control específico del scroll */
+            overflow-y: auto;
+            overflow-x: hidden;
+            /* NUEVO: Scroll suave */
+            scroll-behavior: smooth;
+            /* NUEVO: Evitar que el scroll se propague */
+            overscroll-behavior: contain;
+        }
+
+        /* NUEVO: Input fijo en la parte inferior */
+        .chat-input-area {
+            position: sticky;
+            bottom: 0;
+            background: var(--widget-bg);
+            /* NUEVO: Sombra para separar del contenido */
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            /* NUEVO: Evitar que se encoja */
+            flex-shrink: 0;
+        }
+
+        /* NUEVO: Ajuste del textarea en móvil */
+        .chat-input {
+            /* NUEVO: Evitar zoom en iOS */
+            font-size: 16px;
+            /* NUEVO: Altura mínima más pequeña en móvil */
+            min-height: 44px;
+        }
     }
     </style>
 
@@ -2304,50 +2353,78 @@
 
     // Inicialización cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', function() {
-    const floatingCTA = document.getElementById('floatingCTA');
-    const chatWidget = document.getElementById('chatWidget');
-    const chatClose = document.getElementById('chatClose');
-    const chatInput = document.getElementById('chatInput');
-    const chatSend = document.getElementById('chatSend');
-    
-    // Abre el chat al hacer clic en el botón flotante
-    if (floatingCTA) {
-        floatingCTA.addEventListener('click', function(e) {
-        e.preventDefault();
-        chatWidget.classList.add('show');
-        chatInput.focus();
+        const floatingCTA = document.getElementById('floatingCTA');
+        const chatWidget = document.getElementById('chatWidget');
+        const chatClose = document.getElementById('chatClose');
+        const chatInput = document.getElementById('chatInput');
+        const chatSend = document.getElementById('chatSend');
+        
+        // Abre el chat al hacer clic en el botón flotante
+        if (floatingCTA) {
+            floatingCTA.addEventListener('click', function(e) {
+                e.preventDefault();
+                chatWidget.classList.add('show');
+                // NUEVO: Prevenir scroll del body en móvil
+                if (window.innerWidth <= 600) {
+                    document.body.classList.add('chat-open');
+                }
+                chatInput.focus();
+            });
+        }
+        
+        // Cierra el chat
+        chatClose.addEventListener('click', function() {
+            chatWidget.classList.remove('show');
+            // NUEVO: Restaurar scroll del body
+            document.body.classList.remove('chat-open');
         });
-    }
-    
-    // Cierra el chat
-    chatClose.addEventListener('click', function() {
-        chatWidget.classList.remove('show');
-    });
-    
-    // Envío con botón
-    chatSend.addEventListener('click', handleSendMessage);
-    
-    // Manejo de teclas en textarea: Enter envía, Shift+Enter nueva línea
-    chatInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        handleSendMessage();
-        }
-    });
-    
-    // Auto-resize del textarea
-    chatInput.addEventListener('input', function() {
-        autoResizeTextarea(this);
-    });
-    
-    // Cierra chat al hacer clic fuera (opcional)
-    document.addEventListener('click', function(e) {
-        if (chatWidget.classList.contains('show') && 
-            !chatWidget.contains(e.target) && 
-            !floatingCTA.contains(e.target)) {
-        chatWidget.classList.remove('show');
-        }
-    });
+        
+        // Envío con botón
+        chatSend.addEventListener('click', handleSendMessage);
+        
+        // Manejo de teclas en textarea: Enter envía, Shift+Enter nueva línea
+        chatInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        });
+        
+        // Auto-resize del textarea
+        chatInput.addEventListener('input', function() {
+            autoResizeTextarea(this);
+        });
+        
+        // Cierra chat al hacer clic fuera (opcional) - MODIFICADO para móvil
+        document.addEventListener('click', function(e) {
+            if (chatWidget.classList.contains('show') && 
+                !chatWidget.contains(e.target) && 
+                !floatingCTA.contains(e.target) &&
+                window.innerWidth > 600) { // Solo en desktop
+                chatWidget.classList.remove('show');
+                document.body.classList.remove('chat-open');
+            }
+        });
+
+        // NUEVO: Manejar cambios de orientación en móvil
+        window.addEventListener('orientationchange', function() {
+            if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
+                // Pequeño delay para que se ajuste la orientación
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100);
+            }
+        });
+
+        // NUEVO: Manejar el evento de mostrar/ocultar teclado virtual
+        window.addEventListener('resize', function() {
+            if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
+                // Scroll automático cuando cambia el tamaño (teclado aparece/desaparece)
+                setTimeout(() => {
+                    scrollToBottom();
+                }, 100);
+            }
+        });
     });
     </script>
     <!-- CHAT WIDGET END -->
