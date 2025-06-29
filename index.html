@@ -2469,16 +2469,6 @@
                 }, 200);
             }
         });
-
-        // NUEVO: Manejar el evento de mostrar/ocultar teclado virtual
-        window.addEventListener('resize', function() {
-            if (chatWidget.classList.contains('show') && window.innerWidth <= 600) {
-                // Scroll automático cuando cambia el tamaño (teclado aparece/desaparece)
-                setTimeout(() => {
-                    scrollToBottom();
-                }, 100);
-            }
-        });
     });
     </script>
     <!-- CHAT WIDGET END -->
