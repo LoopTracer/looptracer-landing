@@ -2310,7 +2310,7 @@
         }
     }
 
-    // Envía mensaje al webhook y maneja respuesta
+    // Actualiza la función sendMessage para incluir user agent
     async function sendMessage(message) {
         const chatLog = document.getElementById('chatLog');
         const chatInput = document.getElementById('chatInput');
@@ -2338,7 +2338,7 @@
             // Muestra indicador de escritura
             showTypingIndicator();
             
-            // Hace petición al webhook
+            // Hace petición al webhook con datos adicionales
             const response = await fetch(API_ENDPOINT, {
                 method: 'POST',
                 headers: {
@@ -2346,7 +2346,9 @@
                 },
                 body: JSON.stringify({
                     question: message,
-                    sessionId: getSessionId()
+                    sessionId: getSessionId(),
+                    ua: navigator.userAgent,  // Añade el user agent
+                    ip: ''  // La IP se capturará del lado del servidor
                 })
             });
             
@@ -2354,10 +2356,27 @@
             removeTypingIndicator();
             
             if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+                // Intenta obtener el mensaje de error del servidor
+                let errorMessage = 'Lo siento, hubo un error. Prueba otra vez.';
+                try {
+                    const errorData = await response.json();
+                    if (errorData.error) {
+                        errorMessage = errorData.error;
+                    }
+                } catch (e) {
+                    // Si no puede parsear el error, usa el mensaje por defecto
+                }
+                
+                throw new Error(errorMessage);
             }
             
             const data = await response.json();
+            
+            // Maneja respuestas de error del servidor
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            
             const answer = data.answer || 'Lo siento, no pude procesar tu mensaje.';
             
             // Añade respuesta de la IA
@@ -2366,8 +2385,11 @@
         } catch (error) {
             // Remueve indicador y muestra error
             removeTypingIndicator();
+            
+            // Muestra el mensaje de error específico si existe
+            const errorMessage = error.message || 'Lo siento, hubo un error. Prueba otra vez.';
             chatLog.insertAdjacentHTML('beforeend', 
-                '<div class="chat-message error-message">Lo siento, hubo un error. Prueba otra vez.</div>'
+                `<div class="chat-message error-message">${errorMessage}</div>`
             );
             console.error('Error enviando mensaje:', error);
             
