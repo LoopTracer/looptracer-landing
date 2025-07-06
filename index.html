@@ -2397,7 +2397,7 @@
             // Muestra el mensaje de error específico si existe
             const errorMessage = error.message || 'Lo siento, hubo un error. Prueba otra vez.';
             chatLog.insertAdjacentHTML('beforeend', 
-                `<div class="chat-message error-message">${errorMessage}</div>`
+                `<div class="chat-message error-message">${linkify(errorMessage)}</div>`
             );
             console.error('Error enviando mensaje:', error);
             
