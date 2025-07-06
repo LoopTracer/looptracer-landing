@@ -2270,10 +2270,18 @@
     return sessionId;
     }
 
-    // Formatea mensaje y devuelve HTML de la burbuja
+    function linkify(str) {
+    return str.replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>'
+    );
+    }
+
     function formatMessage(text, role) {
     const messageClass = role === 'user' ? 'user-message' : 'bot-message';
-    return `<div class="chat-message ${messageClass}">${text}</div>`;
+    // Solo al bot o a ambos, según lo que quieras
+    const safeText = role === 'bot' ? linkify(text) : text;
+    return `<div class="chat-message ${messageClass}">${safeText}</div>`;
     }
 
     // Scroll automático al último mensaje
