@@ -2618,7 +2618,7 @@
             </div>
 
             <button class="calculator-cta" id="calculator-cta" onclick="openCalendar()" disabled>
-            Me interesa → agenda gratis
+            Me interesa → Consulta gratuita
             </button>
 
             <div class="cta-footer">
@@ -2847,33 +2847,41 @@
         updateCalculatorSummary();
         }
 
+        // Actualizar resumen con cálculo correcto
         function updateCalculatorSummary() {
-        const selectedItems = document.querySelectorAll('.process-item.selected');
-        let totalPrice = 0;
-        let totalSavings = 0;
+            const selectedItems = document.querySelectorAll('.process-item.selected');
+            let totalPrice = 0;
+            let totalSavings = 0;
+            let totalMonthlyValue = 0;
 
-        selectedItems.forEach(item => {
-            totalPrice += parseInt(item.dataset.price);
-            totalSavings += parseInt(item.dataset.savings);
-        });
+            selectedItems.forEach(item => {
+                const price = parseInt(item.dataset.price);
+                const savings = parseInt(item.dataset.savings);
+                const hourlyValue = parseFloat(item.dataset.hourlyValue) || 25; // Valor por defecto si no está definido
+                
+                totalPrice += price;
+                totalSavings += savings;
+                totalMonthlyValue += savings * hourlyValue;
+            });
 
-        const monthlyValue = totalSavings * 25;
+            // Actualizar UI
+            document.querySelector('.total-price').textContent = totalPrice.toLocaleString('es-ES') + '€';
+            document.querySelector('.total-savings').textContent = `${totalSavings} horas`;
+            document.querySelector('.monthly-value').textContent = Math.round(totalMonthlyValue).toLocaleString('es-ES') + '€';
 
-        document.querySelector('.total-price').textContent = totalPrice.toLocaleString() + '€';
-        document.querySelector('.total-savings').textContent = `${totalSavings} horas`;
-        document.querySelector('.monthly-value').textContent = monthlyValue.toLocaleString() + '€';
+            // Calcular ROI
+            const roiMonths = totalMonthlyValue > 0 ? (totalPrice / totalMonthlyValue).toFixed(1) : '-';
+            document.getElementById('roi-months').textContent = roiMonths;
 
-        const roiMonths = totalPrice > 0 ? Math.ceil(totalPrice / monthlyValue) : 0;
-        document.getElementById('roi-months').textContent = totalPrice > 0 ? roiMonths : '-';
-
-        const ctaButton = document.getElementById('calculator-cta');
-        if (selectedItems.length > 0) {
-            ctaButton.disabled = false;
-            ctaButton.textContent = `Quiero este pack (${totalPrice.toLocaleString()}€) → agenda gratis`;
-        } else {
-            ctaButton.disabled = true;
-            ctaButton.textContent = 'Quiero este pack → agenda gratis';
-        }
+            // Actualizar botón CTA
+            const ctaButton = document.getElementById('calculator-cta');
+            if (selectedItems.length > 0) {
+                ctaButton.disabled = false;
+                ctaButton.textContent = `Quiero este pack (${totalPrice.toLocaleString('es-ES')}€) → Consulta gratuita`;
+            } else {
+                ctaButton.disabled = true;
+                ctaButton.textContent = 'Me interesa → Consulta gratuita';
+            }
         }
 
         // Click fuera cierra
