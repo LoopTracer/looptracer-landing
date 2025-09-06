@@ -15,6 +15,14 @@ interface FormData {
   notes: string;
 }
 
+interface CaseStudy {
+  id: string;
+  title: string;
+  images: string[];
+  description: string;
+  isBest?: boolean;
+}
+
 export default function Home() {
   const [utms, setUtms] = useState<UTMParams>({});
   const [formData, setFormData] = useState<FormData>({
@@ -25,6 +33,61 @@ export default function Home() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+
+  const caseStudies: CaseStudy[] = [
+    {
+      id: 'gestoria',
+      title: 'GestorIA',
+      images: [
+        '/case-gestoria-1.jpg',
+        '/case-gestoria-2.jpg',
+        '/case-gestoria-3.jpg',
+        '/case-gestoria-4.jpg'
+      ],
+      description: 'Asistente de IA que revoluciona la gestión documental y consultas en gestorías. Responde dudas de clientes y empleados citando documentos específicos.',
+      isBest: true
+    },
+    {
+      id: 'documentos',
+      title: 'Gestión Doc y Firma Automática',
+      images: [
+        '/case-docs-1.jpg',
+        '/case-docs-2.jpg',
+        '/case-docs-3.jpg'
+      ],
+      description: 'Sistema automatizado de gestión documental con firma electrónica integrada. Reduce el tiempo de procesamiento en un 80%.'
+    },
+    {
+      id: 'ventas',
+      title: 'Punto de Ventas',
+      images: [
+        '/case-ventas-1.jpg',
+        '/case-ventas-2.jpg',
+        '/case-ventas-3.jpg',
+        '/case-ventas-4.jpg',
+        '/case-ventas-5.jpg'
+      ],
+      description: 'Terminal de punto de venta integrado con gestión de inventario, facturación automática y analytics en tiempo real.'
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "¿Qué tipos de automatizaciones hacéis?",
+      answer: "Desarrollamos desde automatizaciones simples como envío de emails automáticos hasta sistemas complejos con IA como nuestro GestorIA. Incluye: gestión documental, procesamiento de datos, integración entre herramientas, chatbots inteligentes, y mucho más."
+    },
+    {
+      question: "¿Voy a tener que gastar mucho?",
+      answer: "Nuestros proyectos se adaptan a tu presupuesto. Ofrecemos desde soluciones básicas por 200€/mes hasta desarrollos personalizados. El ROI suele recuperarse en 2-6 meses gracias al ahorro de tiempo y errores."
+    },
+    {
+      question: "¿Tendré que cambiar mis herramientas y procesos?",
+      answer: "No. Nos adaptamos a tu forma de trabajar actual. Conectamos tus herramientas existentes y mejoramos los procesos sin que tengas que cambiar nada. Es nuestra filosofía: automatizar sin interrumpir."
+    }
+  ];
 
   useEffect(() => {
     // Capturar UTMs de la URL
@@ -131,7 +194,35 @@ export default function Home() {
     }
   };
 
-  const deadline = process.env.NEXT_PUBLIC_OFFER_DEADLINE || '2025-09-15';
+  const openCaseModal = (caseStudy: CaseStudy) => {
+    setSelectedCase(caseStudy);
+    setSelectedImageIndex(0);
+  };
+
+  const closeCaseModal = () => {
+    setSelectedCase(null);
+    setSelectedImageIndex(0);
+  };
+
+  const nextImage = () => {
+    if (selectedCase) {
+      setSelectedImageIndex((prev) => 
+        prev === selectedCase.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const prevImage = () => {
+    if (selectedCase) {
+      setSelectedImageIndex((prev) => 
+        prev === 0 ? selectedCase.images.length - 1 : prev - 1
+      );
+    }
+  };
+
+  const toggleFAQ = (index: number) => {
+    setOpenFAQ(openFAQ === index ? null : index);
+  };
 
   return (
     <main className="min-h-screen bg-dark-bg text-text-primary font-inter">
@@ -150,67 +241,102 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <div className="text-center">
-          <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
-            Automatizamos tu gestoría sin cambiar tu forma de trabajar.
-          </h1>
-          
-          <p className="text-xl text-text-secondary mb-8 leading-relaxed">
-            Analizamos tus flujos de trabajo actuales y adaptándonos a ellos te hacemos ahorrar horas sin mover un dedo.
-          </p>
+      {/* Hero Section Mejorado */}
+      <section className="pt-32 pb-16">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-3xl p-12 text-center backdrop-blur-sm">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight tracking-wide text-white">
+              ¿QUIERES AHORRAR TIEMPO Y DINERO?
+            </h1>
+            
+            <p className="text-xl md:text-2xl text-text-secondary mb-8 font-medium">
+              Déjalo en manos de los que sabemos hacerlo
+            </p>
 
-          <div className="space-y-4 mb-12">
-            <div className="flex items-center justify-start text-left max-w-2xl mx-auto">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full mr-4 flex-shrink-0"></span>
-              <p className="text-text-primary">Desarrollamos desde flujos simples hasta programas completos</p>
-            </div>
-            <div className="flex items-center justify-start text-left max-w-2xl mx-auto">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full mr-4 flex-shrink-0"></span>
-              <p className="text-text-primary">Implementamos Inteligencia Artificial si la necesitas</p>
-            </div>
-            <div className="flex items-center justify-start text-left max-w-2xl mx-auto">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full mr-4 flex-shrink-0"></span>
-              <p className="text-text-primary">No tenemos límites, llegamos hasta donde necesites, siempre y cuando creamos que es rentable en tu caso</p>
+            <div className="relative">
+              <div className="text-4xl md:text-6xl font-black text-transparent bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text mb-8">
+                AUTOMATIZA TU NEGOCIO
+              </div>
+              <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-500 rounded-full animate-pulse"></div>
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-emerald-400 rounded-full animate-pulse delay-300"></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Cómo funciona */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-semibold mb-12 text-center">
-          Cómo trabajamos
+      {/* Casos de Éxito */}
+      <section className="max-w-6xl mx-auto px-6 py-16">
+        <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
+          Casos de Éxito
         </h2>
         
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="text-center">
-            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-emerald-500 font-semibold text-xl">1</span>
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+          {caseStudies.map((caseStudy) => (
+            <div key={caseStudy.id} className="relative group cursor-pointer" onClick={() => openCaseModal(caseStudy)}>
+              {caseStudy.isBest && (
+                <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center">
+                  ⭐ Top
+                </div>
+              )}
+              
+              <div className="bg-gray-800/30 rounded-xl p-6 border border-white/10 hover:border-emerald-500/50 transition-all duration-300 group-hover:scale-105">
+                <h3 className="text-lg font-semibold text-center mb-4 text-emerald-400">
+                  {caseStudy.title}
+                </h3>
+                
+                <div className="aspect-video bg-gray-700/50 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center">
+                    <div className="text-4xl text-emerald-400 group-hover:scale-110 transition-transform">
+                      {caseStudy.id === 'gestoria' ? '🤖' : caseStudy.id === 'documentos' ? '📋' : '🛒'}
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                    <span className="text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      Ver más
+                    </span>
+                  </div>
+                </div>
+                
+                <p className="text-text-secondary text-sm leading-relaxed">
+                  {caseStudy.description}
+                </p>
+              </div>
             </div>
-            <p className="text-text-primary leading-relaxed">
-              Analizamos los procesos para encontrar los cuellos de botella de tu gestoría.
-            </p>
-          </div>
-          
-          <div className="text-center">
-            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-emerald-500 font-semibold text-xl">2</span>
+          ))}
+        </div>
+
+        <p className="text-center text-text-secondary italic">
+          Esto solo son algunos ejemplos...
+        </p>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="max-w-4xl mx-auto px-6 py-16">
+        <h2 className="text-3xl font-semibold mb-12 text-center">
+          Preguntas Frecuentes
+        </h2>
+        
+        <div className="space-y-4">
+          {faqs.map((faq, index) => (
+            <div key={index} className="bg-gray-800/30 rounded-xl border border-white/10 overflow-hidden">
+              <button
+                onClick={() => toggleFAQ(index)}
+                className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700/30 transition-colors"
+              >
+                <span className="font-medium text-text-primary">{faq.question}</span>
+                <span className={`text-emerald-400 transition-transform ${openFAQ === index ? 'rotate-180' : ''}`}>
+                  ↓
+                </span>
+              </button>
+              {openFAQ === index && (
+                <div className="px-6 pb-4">
+                  <p className="text-text-secondary leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              )}
             </div>
-            <p className="text-text-primary leading-relaxed">
-              Planificamos las automatizaciones que más optimicen tu forma de trabajo y multipliquen tu eficiencia.
-            </p>
-          </div>
-          
-          <div className="text-center">
-            <div className="w-12 h-12 bg-emerald-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <span className="text-emerald-500 font-semibold text-xl">3</span>
-            </div>
-            <p className="text-text-primary leading-relaxed">
-              Desarrollamos, implementamos y resolvemos todas las dudas de tu equipo.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
@@ -291,7 +417,78 @@ export default function Home() {
         </form>
       </section>
 
-      {/* Modal de Información */}
+      {/* Botón WhatsApp Flotante */}
+      <button
+        onClick={handleWhatsAppClick}
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+        aria-label="Contactar por WhatsApp"
+      >
+        <svg className="w-8 h-8 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+        </svg>
+      </button>
+
+      {/* Modal de Casos de Éxito */}
+      {selectedCase && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80">
+          <div className="relative bg-dark-bg border border-white/20 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="p-6 border-b border-white/10 flex justify-between items-center">
+              <h3 className="text-2xl font-semibold text-text-primary">{selectedCase.title}</h3>
+              <button
+                onClick={closeCaseModal}
+                className="text-text-secondary hover:text-text-primary transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="relative mb-6">
+                <div className="aspect-video bg-gray-700 rounded-lg overflow-hidden">
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center">
+                    <span className="text-text-secondary">Imagen {selectedImageIndex + 1} de {selectedCase.images.length}</span>
+                  </div>
+                </div>
+                
+                {selectedCase.images.length > 1 && (
+                  <>
+                    <button
+                      onClick={prevImage}
+                      className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                    >
+                      ←
+                    </button>
+                    <button
+                      onClick={nextImage}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
+                    >
+                      →
+                    </button>
+                  </>
+                )}
+                
+                <div className="flex justify-center mt-4 space-x-2">
+                  {selectedCase.images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-colors ${
+                        index === selectedImageIndex ? 'bg-emerald-500' : 'bg-gray-600'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+              
+              <p className="text-text-secondary leading-relaxed">{selectedCase.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Información LoopTracer */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           {/* Overlay */}
