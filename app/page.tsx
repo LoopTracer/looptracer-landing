@@ -36,57 +36,54 @@ export default function Home() {
   const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [openFAQ, setOpenFAQ] = useState<number | null>(null);
+  const [reserveFormData, setReserveFormData] = useState({
+    name: '',
+    email: ''
+  });
+  const [isReserving, setIsReserving] = useState(false);
 
   const caseStudies: CaseStudy[] = [
     {
       id: 'gestoria',
-      title: 'GestorIA',
-      images: [
-        '/case-gestoria-1.jpg',
-        '/case-gestoria-2.jpg',
-        '/case-gestoria-3.jpg',
-        '/case-gestoria-4.jpg'
-      ],
-      description: 'Asistente de IA que revoluciona la gestión documental y consultas en gestorías. Responde dudas de clientes y empleados citando documentos específicos.',
+      title: 'Conectamos Todas tus Herramientas',
+      images: ['/service-integration.png'],
+      description: 'Integramos todas tus herramientas de trabajo en un ecosistema unificado. Conectamos emails, CRM, ERP, bases de datos y aplicaciones para que trabajen en sincronía, eliminando duplicaciones y optimizando procesos.',
       isBest: true
     },
     {
       id: 'documentos',
-      title: 'Gestión Doc y Firma Automática',
-      images: [
-        '/case-docs-1.jpg',
-        '/case-docs-2.jpg',
-        '/case-docs-3.jpg'
-      ],
-      description: 'Sistema automatizado de gestión documental con firma electrónica integrada. Reduce el tiempo de procesamiento en un 80%.'
+      title: 'Implementamos IA en tus Procesos',
+      images: ['/service-ai.png'],
+      description: 'Implementamos inteligencia artificial in tus procesos empresariales para automatizar tareas repetitivas. Desde chatbots inteligentes hasta sistemas de análisis predictivo que optimizan la toma de decisiones y reducen tiempos operativos.'
     },
     {
       id: 'ventas',
-      title: 'Punto de Ventas',
+      title: 'Desarrollamos SaaS y Sistemas a Medida',
       images: [
-        '/case-ventas-1.jpg',
-        '/case-ventas-2.jpg',
-        '/case-ventas-3.jpg',
-        '/case-ventas-4.jpg',
-        '/case-ventas-5.jpg'
+        '/service-saas-1.png',
+        '/service-saas-2.png'
       ],
-      description: 'Terminal de punto de venta integrado con gestión de inventario, facturación automática y analytics en tiempo real.'
+      description: 'Creamos software personalizado y plataformas SaaS adaptadas a tu modelo de negocio. Desarrollamos aplicaciones web, sistemas de gestión empresarial y soluciones tecnológicas 100% a medida partiendo de lo que ya utilizas.'
     }
   ];
 
   const faqs = [
     {
       question: "¿Qué tipos de automatizaciones hacéis?",
-      answer: "Desarrollamos desde automatizaciones simples como envío de emails automáticos hasta sistemas complejos con IA como nuestro GestorIA. Incluye: gestión documental, procesamiento de datos, integración entre herramientas, chatbots inteligentes, y mucho más."
+      answer: "Cada empresa es diferente, por lo que somos muy flexibles. Desarrollamos desde automatizaciones simples como envío de emails automáticos hasta sistemas complejos con IA, integraciones personalizadas o incluso micro SaaS completos. Es cuestión de estudiar tu caso."
     },
     {
       question: "¿Voy a tener que gastar mucho?",
-      answer: "Nuestros proyectos se adaptan a tu presupuesto. Ofrecemos desde soluciones básicas por 200€/mes hasta desarrollos personalizados. El ROI suele recuperarse en 2-6 meses gracias al ahorro de tiempo y errores."
+      answer: "Esto no es un gasto es una inversión, y te garantizamos que la recuperarás en pocos meses. Los precios pueden variar mucho, ya que cada desarrollo es muy personalizado. Si deseas una cifra exacta, puedes solicitar un presupuesto gratuito ahora mismo."
     },
     {
-      question: "¿Tendré que cambiar mis herramientas y procesos?",
-      answer: "No. Nos adaptamos a tu forma de trabajar actual. Conectamos tus herramientas existentes y mejoramos los procesos sin que tengas que cambiar nada. Es nuestra filosofía: automatizar sin interrumpir."
-    }
+      question: "¿Tendré que cambiar mis herramientas y procesos de toda la vida?",
+      answer: "No. Nos adaptamos a tu forma de trabajo al 100%. Conectamos tus herramientas y optimizamos los procesos sin que tengas que cambiar nada. Estamos aquí para ahorrarte tiempo y problemas."
+    },
+    {
+      question: "¿Cuánto tendré que esperar?",
+      answer: "Depende de la complejidad de la automatización y la demanda de trabajo del momento, pero para la mayoría de casos no necesitamos más de 2 semanas. Hemos optimizado mucho nuestro sistema de trabajo gracias a la Inteligencia Artificial."
+    },
   ];
 
   useEffect(() => {
@@ -156,44 +153,6 @@ export default function Home() {
     }, 120);
   };
 
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Validación mínima
-    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
-      alert('Por favor, completa todos los campos obligatorios.');
-      return;
-    }
-
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('/api/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          ...utms,
-          path: window.location.pathname,
-          userAgent: navigator.userAgent
-        })
-      });
-
-      const result = await response.json();
-      
-      if (result.ok) {
-        alert('Gracias. Te contactamos en breve.');
-        setFormData({ name: '', email: '', phone: '', notes: '' });
-      } else {
-        alert('Ha habido un error. Inténtalo de nuevo.');
-      }
-    } catch (error) {
-      alert('Ha habido un error. Inténtalo de nuevo.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const openCaseModal = (caseStudy: CaseStudy) => {
     setSelectedCase(caseStudy);
     setSelectedImageIndex(0);
@@ -220,8 +179,91 @@ export default function Home() {
     }
   };
 
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    // Validación mínima
+    if (!formData.name.trim() || !formData.email.trim()) {
+      alert('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: '',
+          notes: 'Contacto desde formulario simplificado',
+          ...utms,
+          path: window.location.pathname,
+          userAgent: navigator.userAgent
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.ok) {
+        alert('Gracias. Te contactamos en breve.');
+        setFormData({ name: '', email: '', phone: '', notes: '' });
+      } else {
+        alert('Ha habido un error. Inténtalo de nuevo.');
+      }
+    } catch (error) {
+      alert('Ha habido un error. Inténtalo de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
   const toggleFAQ = (index: number) => {
     setOpenFAQ(openFAQ === index ? null : index);
+  };
+
+  const handleReserveSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!reserveFormData.name.trim() || !reserveFormData.email.trim()) {
+      alert('Por favor, completa todos los campos.');
+      return;
+    }
+
+    setIsReserving(true);
+    
+    try {
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: reserveFormData.name,
+          email: reserveFormData.email,
+          phone: '',
+          notes: 'Reserva plaza lanzamiento LoopTracer',
+          ...utms,
+          path: window.location.pathname,
+          userAgent: navigator.userAgent
+        })
+      });
+
+      const result = await response.json();
+      
+      if (result.ok) {
+        alert('¡Reserva confirmada! Te contactaremos el 1 de Octubre con todos los detalles.');
+        setReserveFormData({ name: '', email: '' });
+        setIsModalOpen(false);
+      } else {
+        alert('Ha habido un error. Inténtalo de nuevo.');
+      }
+    } catch (error) {
+      alert('Ha habido un error. Inténtalo de nuevo.');
+    } finally {
+      setIsReserving(false);
+    }
   };
 
   return (
@@ -230,12 +272,12 @@ export default function Home() {
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-600 to-emerald-500 shadow-lg">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <p className="text-center text-lg md:text-xl font-medium text-white">
-            ¿Es la primera vez que trabajas con nosotros? ¡Estás de suerte! ...{' '}
+            ¿Nuevo en LoopTracer? -{'>'} {' '}
             <button 
               onClick={() => setIsModalOpen(true)}
               className="underline hover:no-underline font-semibold transition-all duration-200 hover:text-emerald-100"
             >
-              "Saber más"
+              Descubrir
             </button>
           </p>
         </div>
@@ -244,9 +286,9 @@ export default function Home() {
       {/* Hero Section Mejorado */}
       <section className="pt-32 pb-16">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-3xl p-12 text-center backdrop-blur-sm">
+          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-3xl p-12 text-center backdrop-blur-sm">           
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight tracking-wide text-white">
-              ¿QUIERES AHORRAR TIEMPO Y DINERO?
+              ¿QUIERES AHORRAR <span className="text-emerald-400">TIEMPO</span> Y DINERO?
             </h1>
             
             <p className="text-xl md:text-2xl text-text-secondary mb-8 font-medium">
@@ -254,7 +296,7 @@ export default function Home() {
             </p>
 
             <div className="relative">
-              <div className="text-4xl md:text-6xl font-black text-transparent bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text mb-8">
+              <div className="text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text mb-8">
                 AUTOMATIZA TU NEGOCIO
               </div>
               <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -264,33 +306,50 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Logo */}
+      <div className="mb-2 mt-2">
+        <img 
+          src="/logo.png" 
+          alt="LoopTracer" 
+          className="h-60 md:h-72 mx-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+        />
+      </div>
+
       {/* Casos de Éxito */}
       <section className="max-w-6xl mx-auto px-6 py-16">
         <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
-          Casos de Éxito
+          Nuestros Servicios
         </h2>
         
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {caseStudies.map((caseStudy) => (
             <div key={caseStudy.id} className="relative group cursor-pointer" onClick={() => openCaseModal(caseStudy)}>
-              {caseStudy.isBest && (
-                <div className="absolute -top-2 -right-2 z-10 bg-gradient-to-r from-yellow-400 to-yellow-500 text-black px-3 py-1 rounded-full text-xs font-bold flex items-center">
-                  ⭐ Top
-                </div>
-              )}
-              
               <div className="bg-gray-800/30 rounded-xl p-6 border border-white/10 hover:border-emerald-500/50 transition-all duration-300 group-hover:scale-105">
                 <h3 className="text-lg font-semibold text-center mb-4 text-emerald-400">
                   {caseStudy.title}
                 </h3>
                 
-                <div className="aspect-video bg-gray-700/50 rounded-lg mb-4 flex items-center justify-center relative overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center">
-                    <div className="text-4xl text-emerald-400 group-hover:scale-110 transition-transform">
-                      {caseStudy.id === 'gestoria' ? '🤖' : caseStudy.id === 'documentos' ? '📋' : '🛒'}
+                <div className="aspect-video bg-gray-700/50 rounded-lg mb-4 relative overflow-hidden">
+                  <img 
+                    src={caseStudy.images[0]}
+                    alt={caseStudy.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      if (fallback) {
+                        fallback.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 items-center justify-center hidden">
+                    <div className="text-emerald-400 text-center">
+                      <div className="text-2xl mb-2">📷</div>
+                      <div className="text-sm">Imagen próximamente</div>
                     </div>
                   </div>
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
                     <span className="text-white font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                       Ver más
                     </span>
@@ -306,7 +365,7 @@ export default function Home() {
         </div>
 
         <p className="text-center text-text-secondary italic">
-          Esto solo son algunos ejemplos...
+          Analizamos tu caso y aplicamos solo lo que multiplique tu productividad
         </p>
       </section>
 
@@ -382,27 +441,6 @@ export default function Home() {
             />
           </div>
           
-          <div>
-            <input
-              type="tel"
-              placeholder="Teléfono *"
-              value={formData.phone}
-              onChange={(e) => setFormData({...formData, phone: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50"
-              required
-            />
-          </div>
-          
-          <div>
-            <textarea
-              placeholder="Notas (opcional)"
-              rows={4}
-              value={formData.notes}
-              onChange={(e) => setFormData({...formData, notes: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50 resize-none"
-            />
-          </div>
-          
           <button
             type="submit"
             disabled={isSubmitting}
@@ -447,7 +485,20 @@ export default function Home() {
             <div className="p-6">
               <div className="relative mb-6">
                 <div className="aspect-video bg-gray-700 rounded-lg overflow-hidden">
-                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 flex items-center justify-center">
+                  <img 
+                    src={selectedCase.images[selectedImageIndex]}
+                    alt={`${selectedCase.title} - ${selectedImageIndex + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      target.style.display = 'none';
+                      if (fallback) {
+                        fallback.style.display = 'flex';
+                      }
+                    }}
+                  />
+                  <div className="w-full h-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 items-center justify-center hidden">
                     <span className="text-text-secondary">Imagen {selectedImageIndex + 1} de {selectedCase.images.length}</span>
                   </div>
                 </div>
@@ -498,213 +549,343 @@ export default function Home() {
           ></div>
           
           {/* Modal Content */}
-          <div className="relative bg-dark-bg border border-white/20 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+          <div className="relative bg-dark-bg border border-white/20 rounded-2xl max-w-5xl w-full max-h-[90vh] overflow-y-auto overflow-x-hidden shadow-2xl">
             {/* Header */}
-            <div className="p-6 border-b border-white/10">
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl font-semibold text-text-primary">
-                  🎁 LoopTracer - Oferta Exclusiva de Lanzamiento
+            <div className="p-4 border-b border-white/10">
+              <div className="flex items-center justify-center relative">
+                <h3 className="text-2xl md:text-3xl font-bold text-transparent bg-gradient-to-r from-emerald-400 to-emerald-500 bg-clip-text text-center">
+                  ◆ LoopTracer - Reserva tu Plaza de Lanzamiento
                 </h3>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="text-text-secondary hover:text-text-primary transition-colors"
+                  className="absolute right-0 text-text-secondary hover:text-text-primary transition-colors text-3xl font-bold"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                  ✕
                 </button>
               </div>
             </div>
 
             {/* Body */}
-            <div className="p-6 space-y-6">
-              {/* ¿Qué es LoopTracer primero? */}
-              <div className="space-y-4">
-                <h4 className="text-xl font-medium text-text-primary">
-                  ¿Qué es LoopTracer GestorIA?
-                </h4>
-                <div className="text-text-secondary space-y-3 leading-relaxed">
-                  <p>
-                    <strong className="text-text-primary">Tu asistente de IA que conoce toda la información de tu gestoría. </strong> 
-                    Subes tus PDF, Excel, procedimientos, FAQs... y él responde cualquier pregunta diferenciando por roles y realiza tareas de forma independiente. Preparado para preguntas de la Administración (Métricas, datos internos...), de los Trabajadores (Procesos, dudas...), de los clientes (gestiona al completo la atención al cliente)...
-                  </p>
+            <div className="p-4 space-y-6">
+              {/* Información GestorIA */}
+              <div className="bg-gradient-to-r from-gray-800/60 to-gray-700/40 rounded-2xl p-6 border border-white/20">
+                <div className="space-y-8">
+                  {/* ¿Qué es? */}
+                  <div>
+                    <h4 className="text-2xl font-bold text-emerald-400 mb-6 flex items-center">
+                      <span className="mr-3">◆</span>
+                      ¿QUÉ ES GESTOR-IA?
+                    </h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 rounded-xl p-4 border border-blue-500/20">
+                        <h5 className="text-lg font-bold text-blue-400 mb-3 flex items-center">
+                          <span className="mr-2">◉</span>
+                          Gestión Empresarial
+                        </h5>
+                        <p className="text-text-secondary text-sm leading-relaxed">
+                          Proporciona datos actualizados sobre la situación de tu empresa y tus trabajadores.
+                        </p>
+                      </div>
 
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <strong className="text-text-primary">✅ Lo que hace:</strong>
-                      <ul className="text-text-secondary mt-1 space-y-1 text-xs">
-                        <li>• Responde dudas de clientes (opción de conectar Whatsapp o email)</li>
-                        <li>• Se conecta con otras herramientas para realizar tareas</li>
-                        <li>• Acelera el aprendizaje de los nuevos empleados</li>
-                      </ul>
+                      <div className="bg-gradient-to-br from-purple-900/30 to-purple-800/20 rounded-xl p-4 border border-purple-500/20">
+                        <h5 className="text-lg font-bold text-purple-400 mb-3 flex items-center">
+                          <span className="mr-2">◉</span>
+                          Aumento de Productividad
+                        </h5>
+                        <p className="text-text-secondary text-sm leading-relaxed">
+                          Soluciona dudas de trabajadores aportando toda la información interna necesaria. Cuenta con conexiones a tus herramientas de trabajo.
+                        </p>
+                      </div>
+
+                      <div className="bg-gradient-to-br from-orange-900/30 to-orange-800/20 rounded-xl p-4 border border-orange-500/20">
+                        <h5 className="text-lg font-bold text-orange-400 mb-3 flex items-center">
+                          <span className="mr-2">◉</span>
+                          Atención al Cliente 24h
+                        </h5>
+                        <p className="text-text-secondary text-sm leading-relaxed">
+                          Ofrece respuestas inmediatas a preguntas de clientes con posibilidad de conectar directamente a Email, WhatsApp...
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <strong className="text-text-primary">❌ Lo que NO hace:</strong>
-                      <ul className="text-text-secondary mt-1 space-y-1 text-xs">
-                        <li>• Cambiar tu forma de trabajar</li>
-                        <li>• Filtrar tu información</li>
-                        <li>• Salir de Europa</li>
-                      </ul>
+
+                    <div className="mt-6 text-center">
+                      <p className="text-text-primary font-medium">
+                        IA multi-rol con conexión a múltiples herramientas
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* ¿Cómo funciona? */}
+                  <div className="border-t border-white/10 pt-8">
+                    <h4 className="text-2xl font-bold text-emerald-400 mb-6 flex items-center">
+                      <span className="mr-3">◆</span>
+                      ¿CÓMO FUNCIONA?
+                    </h4>
+
+                    <div className="space-y-4">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg flex-shrink-0">
+                          <span className="text-sm leading-none">1</span>
+                        </div>
+                        <div>
+                          <h5 className="text-white font-semibold mb-2">Acceso según tu rol</h5>
+                          <p className="text-text-secondary text-sm">
+                            Accedes al programa con los datos que te proporcionamos. Dependiendo de tu rol (Jefe, trabajador o cliente) tienes acceso a unas funciones u otras.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-4">
+                        <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg flex-shrink-0">
+                          <span className="text-sm leading-none">2</span>
+                        </div>
+                        <div>
+                          <h5 className="text-white font-semibold mb-2">Configura tu información</h5>
+                          <p className="text-text-secondary text-sm">
+                            Alimentas GestorIA con toda tu información señalando qué roles tendrán acceso a cada documento.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-4">
+                        <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg flex-shrink-0">
+                          <span className="text-sm leading-none">3</span>
+                        </div>
+                        <div>
+                          <h5 className="text-white font-semibold mb-2">Sube tus archivos</h5>
+                          <p className="text-text-secondary text-sm">
+                            Arrastras tus archivos de forma intuitiva y el programa los procesa internamente para añadirlos a su base de datos vectorial para un mayor rendimiento.
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start space-x-4">
+                        <div className="w-8 h-8 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg flex-shrink-0">
+                          <span className="text-sm leading-none">4</span>
+                        </div>
+                        <div>
+                          <h5 className="text-white font-semibold mb-2">Listo para empezar</h5>
+                          <p className="text-text-secondary text-sm">
+                            Haces tus preguntas y vas ajustando el programa a tu gusto: añades o eliminas documentos, analizas métricas de uso, conectamos tus canales de comunicación y multiplicamos la productividad conectando herramientas.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Oferta principal destacada */}
-              <div className="bg-gradient-to-r from-emerald-600/20 to-emerald-500/20 border-2 border-emerald-500/50 rounded-xl p-6">
-                <div className="text-center space-y-4">
-                  <div className="inline-flex items-center space-x-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    <span>🔥</span>
+              {/* Calculadora de Ahorro */}
+              <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/30 rounded-2xl p-6 border border-white/20">
+                <h4 className="text-3xl font-bold text-white mb-8 text-center">
+                  ¿CUÁNTO PUEDE AHORRAR GESTOR-IA A TU EMPRESA?
+                </h4>
+                
+                <div className="space-y-6">
+                  {/* Tarjeta 1: Gerente/Dueño */}
+                  <div className="bg-gradient-to-r from-blue-900/40 to-blue-800/30 rounded-xl p-4 border border-blue-500/30">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h5 className="text-xl font-bold text-blue-400 mb-3 flex items-center">
+                          ◉ Asistencia al Gerente/Dueño
+                        </h5>
+                        <div className="text-text-secondary text-sm space-y-1">
+                          <p>▲ Consultas de métricas empresariales</p>
+                          <p>▲ Gestión automática de agenda</p>
+                          <p>▲ Acceso instantáneo a datos de trabajadores</p>
+                          <p className="text-xs opacity-75">Cálculo: 1h × 50€/h × 22 días laborales</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-black text-blue-400">1100€</div>
+                        <div className="text-sm text-text-secondary">al mes</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tarjeta 2: Trabajadores */}
+                  <div className="bg-gradient-to-r from-purple-900/40 to-purple-800/30 rounded-xl p-4 border border-purple-500/30">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h5 className="text-xl font-bold text-purple-400 mb-3 flex items-center">
+                          ◉ Asistencia a Trabajadores
+                        </h5>
+                        <div className="text-text-secondary text-sm space-y-1">
+                          <p>▲ Consultas sobre procedimientos internos</p>
+                          <p>▲ Información sobre clientes y fundamentos empresa</p>
+                          <p>▲ Resolución de dudas sin interrumpir supervisores</p>
+                          <p className="text-xs opacity-75">Cálculo: 3 empleados × 30min × 25€/h × 22 días</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-black text-purple-400">825€</div>
+                        <div className="text-sm text-text-secondary">al mes</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tarjeta 3: Atención al Cliente */}
+                  <div className="bg-gradient-to-r from-orange-900/40 to-orange-800/30 rounded-xl p-4 border border-orange-500/30">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <h5 className="text-xl font-bold text-orange-400 mb-3 flex items-center">
+                          ◉ Atención al Cliente 24/7
+                        </h5>
+                        <div className="text-text-secondary text-sm space-y-1">
+                          <p>▲ Respuestas automáticas/semiautomáticas vía WhatsApp/Email</p>
+                          <p>▲ Resolución de consultas comunes sin intervención</p>
+                          <p>▲ Disponibilidad total fuera de horario laboral</p>
+                          <p className="text-xs opacity-75">Cálculo: 2'5h/día ahorrada × 25€/h × 22 días</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-2xl font-black text-orange-400">1375€</div>
+                        <div className="text-sm text-text-secondary">al mes</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Tarjeta Total */}
+                  <div className="bg-gradient-to-r from-emerald-900/50 to-emerald-800/40 rounded-xl p-8 border-2 border-emerald-500/50">
+                    <div className="text-center">
+                      <h5 className="text-2xl font-bold text-emerald-400 mb-4">
+                        ◆ VALOR TOTAL MENSUAL GENERADO
+                      </h5>
+                      <div className="flex items-center justify-center space-x-4 mb-4">
+                        <span className="text-4xl font-black text-emerald-400">3300€</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Qué Incluye la Oferta */}
+              <div className="bg-gradient-to-r from-emerald-600/30 to-emerald-500/30 border-2 border-emerald-500/50 rounded-2xl p-6 shadow-2xl">
+                <div className="text-center space-y-6">
+                  <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                    <span>◆</span>
                     <span>SOLO SEPTIEMBRE 2025</span>
                   </div>
                   
-                  <h4 className="text-2xl font-bold text-text-primary">
-                    Instalación Gratis + 4 Meses con Descuento
+                  <h4 className="text-3xl font-black text-white mb-8">
+                    ¿QUÉ INCLUYE LA OFERTA?
                   </h4>
                   
-                  <div className="space-y-2">
-                    <div className="flex justify-center items-center space-x-4">
-                      <span className="text-xl text-text-secondary line-through">Instalación: 690€</span>
-                      <span className="text-3xl font-bold text-emerald-400">GRATIS</span>
-                    </div>
-                    <div className="flex justify-center items-center space-x-4">
-                      <span className="text-lg text-text-secondary line-through">Mensualidad: 239€</span>
-                      <span className="text-2xl font-bold text-emerald-400">199€/mes*</span>
-                    </div>
-                  </div>
+                  <div className="bg-gradient-to-r from-gray-800/70 to-gray-700/70 rounded-xl p-4 border border-white/20">
+                    <div className="space-y-6 text-left">
+                      {/* Item 1 */}
+                      <div className="flex items-center justify-between py-3 border-b border-white/10">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-emerald-400 text-xl">▲</span>
+                          <span className="text-lg text-white">
+                            Instalación completamente gratis de <a href="#gestoria" className="text-emerald-400 font-bold underline hover:text-emerald-300 transition-colors">GestorIA</a>
+                          </span>
+                        </div>
+                        <span className="text-xl text-red-400 line-through font-semibold">690€</span>
+                      </div>
 
-                  <div className="bg-gray-800/60 rounded-lg p-4 text-sm">
-                    <p className="text-emerald-400 font-semibold mb-2">🎯 Incluye:</p>
-                    <ul className="text-text-secondary space-y-1 text-left">
-                      <li>• <strong className="text-white">1 mes GRATIS</strong> de prueba</li>
-                      <li>• <strong className="text-white">Implementación gratuita</strong> (valor 690€)</li>
-                      <li>• <strong className="text-white">20% descuento</strong> meses 2, 3 y 4</li>
-                      <li>• Sin permanencia</li>
-                    </ul>
-                    <p className="text-xs text-text-secondary mt-3">*Después del mes gratis: 199€ (meses 2-4), luego 239€/mes.</p>
+                      {/* Item 2 */}
+                      <div className="flex items-center justify-between py-3 border-b border-white/10">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-emerald-400 text-xl">▲</span>
+                          <span className="text-lg text-white">15 días de prueba a 0€</span>
+                        </div>
+                        <span className="text-xl text-red-400 line-through font-semibold">120€</span>
+                      </div>
+
+                      {/* Item 3 */}
+                      <div className="flex items-center justify-between py-3">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-emerald-400 text-xl">▲</span>
+                          <span className="text-lg text-white">
+                            20% mensual de por vida: <span className="text-red-400 line-through">239€</span> → <span className="text-emerald-400 font-bold">199€</span>
+                          </span>
+                        </div>
+                        <span className="text-xl text-red-400 line-through font-semibold">40€/mes</span>
+                      </div>
+                    </div>
+
+                    {/* Total Ahorro */}
+                    <div className="mt-8 p-6 bg-gradient-to-r from-emerald-800/50 to-emerald-700/50 rounded-xl border border-emerald-500/30">
+                      <div className="text-center">
+                        <p className="text-2xl font-bold text-white mb-2">
+                          En el primer mes ahorras <span className="text-emerald-400 text-3xl">810€</span>
+                        </p>
+                        <p className="text-sm text-emerald-300 italic">
+                          ◆ Más 40€ mensuales para siempre
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ROI - Retorno de la Inversión */}
-              <div className="bg-emerald-900/20 rounded-lg p-6 border border-emerald-500/20">
-                <h5 className="text-xl font-semibold text-emerald-400 mb-4 text-center">💰 ¿Cuánto dinero te ahorra realmente?</h5>
-                
-                <div className="space-y-5">
-                  {/* Cálculo principal */}
-                  <div className="bg-gray-800/50 rounded-lg p-4 text-center">
-                    <p className="text-text-primary text-lg font-medium mb-2">
-                      Solo con <strong className="text-emerald-400">3 empleados</strong> ahorrando <strong className="text-emerald-400">30min/día</strong>:
-                    </p>
-                    <div className="text-2xl font-bold text-emerald-400">
-                      825€/mes recuperados vs 199€ coste = <span className="text-white">+626€/mes</span>
-                    </div>
-                    <p className="text-xs text-text-secondary mt-1">(3 personas × 30min × 25€/h × 22 días laborales)</p>
-                  </div>
-
-                  {/* Beneficios específicos */}
-                  <div className="grid md:grid-cols-3 gap-4 text-sm">
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                      <div className="text-center mb-3">
-                        <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-blue-400 font-bold">👑</span>
-                        </div>
-                        <h6 className="font-semibold text-text-primary">Control Total</h6>
-                      </div>
-                      <ul className="text-text-secondary text-xs space-y-1">
-                        <li>• Info de clientes al instante</li>
-                        <li>• Métricas empresariales claras</li>
-                        <li>• Sin depender de empleados</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                      <div className="text-center mb-3">
-                        <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-purple-400 font-bold">⚡</span>
-                        </div>
-                        <h6 className="font-semibold text-text-primary">Empleados Más Rápidos</h6>
-                      </div>
-                      <ul className="text-text-secondary text-xs space-y-1">
-                        <li>• Juniors aprenden sin molestar</li>
-                        <li>• Consultas resueltas al momento</li>
-                        <li>• Menos interrupciones</li>
-                      </ul>
-                    </div>
-
-                    <div className="bg-gray-800/30 rounded-lg p-4">
-                      <div className="text-center mb-3">
-                        <div className="w-10 h-10 bg-orange-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
-                          <span className="text-orange-400 font-bold">🤖</span>
-                        </div>
-                        <h6 className="font-semibold text-text-primary">Atención 24/7</h6>
-                      </div>
-                      <ul className="text-text-secondary text-xs space-y-1">
-                        <li>• Respuestas automáticas</li>
-                        <li>• WhatsApp/Email integrado</li>
-                        <li>• Clientes más satisfechos</li>
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Comparativa antes/después */}
-                  <div className="grid md:grid-cols-2 gap-4 text-sm">
-                    <div className="bg-red-900/20 border border-red-500/20 rounded-lg p-4">
-                      <h6 className="font-semibold text-red-400 mb-2 text-center">❌ Sin LoopTracer</h6>
-                      <ul className="text-text-secondary space-y-1 text-xs">
-                        <li>• Empleados preguntando constantemente</li>
-                        <li>• Búsquedas en archivos interminables</li>
-                        <li>• Clientes esperando respuestas</li>
-                        <li>• Jefe sobrecargado con consultas</li>
-                      </ul>
+              {/* Sección de Lanzamiento */}
+              <div className="pt-6 border-t border-white/10 bg-gradient-to-r from-emerald-900/40 to-emerald-800/40 -mx-6 px-6 pb-8 rounded-b-2xl">
+                <div className="text-center space-y-8">
+                  {/* Copy de lanzamiento */}
+                  <div className="space-y-4">
+                    <div className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg mb-4">
+                      <span>🚀</span>
+                      <span>LANZAMIENTO: 1 DE OCTUBRE 2025</span>
                     </div>
                     
-                    <div className="bg-emerald-900/20 border border-emerald-500/20 rounded-lg p-4">
-                      <h6 className="font-semibold text-emerald-400 mb-2 text-center">✅ Con LoopTracer</h6>
-                      <ul className="text-text-secondary space-y-1 text-xs">
-                        <li>• Respuestas inmediatas y citadas</li>
-                        <li>• Empleados autónomos y eficientes</li>
-                        <li>• Clientes atendidos 24/7</li>
-                        <li>• Jefe enfocado en estrategia</li>
-                      </ul>
+                    <h4 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+                      ◆ Reserva tu Plaza de Lanzamiento
+                    </h4>
+                    
+                    <div className="max-w-2xl mx-auto space-y-3 text-text-secondary">
+                      <p className="text-lg leading-relaxed">
+                        <strong className="text-emerald-400">Solo los primeros 50 clientes</strong> que reserven antes del <strong className="text-white">1 de Octubre</strong> podrán acceder a estas condiciones exclusivas de lanzamiento.
+                      </p>
+                      <p className="text-base">
+                        ◉ Sin compromiso de permanencia<br/>
+                        ◉ Reserva 100% gratuita y sin compromiso<br/>
+                        ◉ Te contactamos el día del lanzamiento con toda la información
+                      </p>
+                      <p className="text-sm italic border-t border-white/10 pt-4 mt-4">
+                        Después del lanzamiento, el precio vuelve al estándar: <span className="text-red-400 font-semibold">239€/mes + 690€ implementación</span>
+                      </p>
                     </div>
                   </div>
-
-                  {/* Resultado final */}
-                  <div className="text-center bg-gradient-to-r from-emerald-800/30 to-emerald-700/30 rounded-lg p-4 border border-emerald-500/30">
-                    <p className="text-text-primary font-semibold">
-                      🎯 <strong className="text-emerald-400">Resultado:</strong> Tu gestoría funciona mejor, tus empleados son más productivos 
-                      y tú recuperas <strong className="text-white">+626€/mes mínimo</strong>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* CTA urgente */}
-              <div className="pt-4 border-t border-white/10 bg-gradient-to-r from-emerald-900/30 to-emerald-800/30 -mx-6 px-6 pb-6">
-                <div className="text-center space-y-4">
-                  <div className="space-y-2">
-                    <p className="text-text-primary font-bold text-lg">
-                      ⏰ Solo durante el mes de Septiembre
-                    </p>
-                    <p className="text-sm text-text-secondary">
-                      Después vuelve al precio normal: <span className="text-red-400 font-semibold">239€/mes + 690€ implementación</span>
-                    </p>
-                  </div>
                   
-                  <button
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      handleWhatsAppClick();
-                    }}
-                    className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold px-12 py-4 rounded-xl transition-all duration-300 text-lg shadow-xl hover:shadow-emerald-500/30 transform hover:scale-105"
-                  >
-                    🚀 QUIERO MI MES GRATIS
-                  </button>
-                  
-                  <p className="text-xs text-text-secondary">
-                    ✅ Sin permanencia • ✅ Cancelas cuando quieras • ✅ Datos 100% en Europa
-                  </p>
+                  {/* Formulario de reserva */}
+                  <form onSubmit={handleReserveSubmit} className="max-w-md mx-auto space-y-4">
+                    <div>
+                      <input
+                        type="text"
+                        placeholder="Tu nombre completo *"
+                        value={reserveFormData.name}
+                        onChange={(e) => setReserveFormData({...reserveFormData, name: e.target.value})}
+                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-text-secondary focus:outline-none focus:border-emerald-500/50 focus:bg-white/15 transition-all"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <input
+                        type="email"
+                        placeholder="Tu mejor email *"
+                        value={reserveFormData.email}
+                        onChange={(e) => setReserveFormData({...reserveFormData, email: e.target.value})}
+                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-text-secondary focus:outline-none focus:border-emerald-500/50 focus:bg-white/15 transition-all"
+                        required
+                      />
+                    </div>
+                    
+                    <button
+                      type="submit"
+                      disabled={isReserving}
+                      className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 disabled:opacity-50 text-white font-bold px-8 py-4 rounded-xl transition-all duration-300 text-lg shadow-xl hover:scale-105 transform"
+                    >
+                      {isReserving ? 'Reservando...' : '◆ RESERVAR MI PLAZA GRATUITA'}
+                    </button>
+                    
+                    <p className="text-xs text-text-secondary">
+                      Al reservar aceptas ser contactado el día del lanzamiento con información sobre GestorIA
+                    </p>
+                  </form>
                 </div>
               </div>
             </div>
@@ -715,8 +896,8 @@ export default function Home() {
       {/* Footer */}
       <footer className="border-t border-white/10 py-8">
         <div className="max-w-4xl mx-auto px-6">
-          <p className="text-center text-text-secondary">
-            LoopTracer — Claro y directo.
+          <p className="text-center">
+            <span className="text-emerald-400">LoopTracer</span> <span className="text-text-secondary">— Claro y directo.</span>
           </p>
         </div>
       </footer>
