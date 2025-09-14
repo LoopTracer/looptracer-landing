@@ -1,5 +1,5 @@
 import './globals.css'
-import { Metadata } from 'next'
+import { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
   title: 'LoopTracer — Automatización para gestorías sin cambiar herramientas',
@@ -17,6 +17,12 @@ export const metadata: Metadata = {
     description: 'Implementamos en días un asistente IA que busca en tus PDF/Excel, responde con cita y permisos por rol. Ahorra horas sin mover un dedo.',
     images: ['/og.jpg'],
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 5.0,
 }
 
 export default function RootLayout({

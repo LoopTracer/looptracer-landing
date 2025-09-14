@@ -270,12 +270,12 @@ export default function Home() {
     <main className="min-h-screen bg-dark-bg text-text-primary font-inter">
       {/* Barra de oferta fija */}
       <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-600 to-emerald-500 shadow-lg">
-        <div className="max-w-6xl mx-auto px-6 py-4">
-          <p className="text-center text-lg md:text-xl font-medium text-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
+          <p className="text-center text-sm sm:text-lg md:text-xl font-medium text-white">
             ¿Nuevo en LoopTracer? -{'>'} {' '}
-            <button 
+            <button
               onClick={() => setIsModalOpen(true)}
-              className="underline hover:no-underline font-semibold transition-all duration-200 hover:text-emerald-100"
+              className="underline hover:no-underline font-semibold transition-all duration-200 hover:text-emerald-100 min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
             >
               Descubrir
             </button>
@@ -284,19 +284,19 @@ export default function Home() {
       </div>
 
       {/* Hero Section Mejorado */}
-      <section className="pt-32 pb-16">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-3xl p-12 text-center backdrop-blur-sm">           
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight tracking-wide text-white">
+      <section className="pt-20 sm:pt-32 pb-12 sm:pb-16">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
+          <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center backdrop-blur-sm">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight tracking-wide text-white">
               ¿QUIERES AHORRAR <span className="text-emerald-400">TIEMPO</span> Y DINERO?
             </h1>
-            
-            <p className="text-xl md:text-2xl text-text-secondary mb-8 font-medium">
+
+            <p className="text-lg sm:text-xl md:text-2xl text-text-secondary mb-6 sm:mb-8 font-medium px-2">
               Déjalo en manos de los que sabemos hacerlo
             </p>
 
             <div className="relative">
-              <div className="text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text mb-8">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-600 bg-clip-text mb-6 sm:mb-8">
                 AUTOMATIZA TU NEGOCIO
               </div>
               <div className="absolute -top-2 -right-2 w-4 h-4 bg-emerald-500 rounded-full animate-pulse"></div>
@@ -307,25 +307,25 @@ export default function Home() {
       </section>
 
       {/* Logo */}
-      <div className="mb-2 mt-2">
-        <img 
-          src="/logo.png" 
-          alt="LoopTracer" 
-          className="h-60 md:h-72 mx-auto opacity-90 hover:opacity-100 transition-opacity duration-300"
+      <div className="mb-2 mt-2 px-4">
+        <img
+          src="/logo.png"
+          alt="LoopTracer"
+          className="h-40 sm:h-60 md:h-72 mx-auto opacity-90 hover:opacity-100 transition-opacity duration-300 max-w-full"
         />
       </div>
 
       {/* Casos de Éxito */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-8 sm:mb-12 text-center px-2">
           Nuestros Servicios
         </h2>
-        
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
           {caseStudies.map((caseStudy) => (
             <div key={caseStudy.id} className="relative group cursor-pointer" onClick={() => openCaseModal(caseStudy)}>
-              <div className="bg-gray-800/30 rounded-xl p-6 border border-white/10 hover:border-emerald-500/50 transition-all duration-300 group-hover:scale-105">
-                <h3 className="text-lg font-semibold text-center mb-4 text-emerald-400">
+              <div className="bg-gray-800/30 rounded-xl p-4 sm:p-6 border border-white/10 hover:border-emerald-500/50 transition-all duration-300 group-hover:scale-105 min-h-[44px] touch-manipulation">
+                <h3 className="text-base sm:text-lg font-semibold text-center mb-3 sm:mb-4 text-emerald-400 leading-tight">
                   {caseStudy.title}
                 </h3>
                 
@@ -356,7 +356,7 @@ export default function Home() {
                   </div>
                 </div>
                 
-                <p className="text-text-secondary text-sm leading-relaxed">
+                <p className="text-text-secondary text-xs sm:text-sm leading-relaxed">
                   {caseStudy.description}
                 </p>
               </div>
@@ -370,26 +370,26 @@ export default function Home() {
       </section>
 
       {/* FAQ Section */}
-      <section className="max-w-4xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-semibold mb-12 text-center">
+      <section className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl font-semibold mb-8 sm:mb-12 text-center px-2">
           Preguntas Frecuentes
         </h2>
-        
-        <div className="space-y-4">
+
+        <div className="space-y-3 sm:space-y-4">
           {faqs.map((faq, index) => (
             <div key={index} className="bg-gray-800/30 rounded-xl border border-white/10 overflow-hidden">
               <button
                 onClick={() => toggleFAQ(index)}
-                className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700/30 transition-colors"
+                className="w-full px-4 sm:px-6 py-4 text-left flex justify-between items-center hover:bg-gray-700/30 transition-colors min-h-[64px] touch-manipulation"
               >
-                <span className="font-medium text-text-primary">{faq.question}</span>
-                <span className={`text-emerald-400 transition-transform ${openFAQ === index ? 'rotate-180' : ''}`}>
+                <span className="font-medium text-text-primary text-sm sm:text-base pr-2 leading-relaxed">{faq.question}</span>
+                <span className={`text-emerald-400 transition-transform ${openFAQ === index ? 'rotate-180' : ''} text-xl flex-shrink-0 w-8 h-8 flex items-center justify-center`}>
                   ↓
                 </span>
               </button>
               {openFAQ === index && (
-                <div className="px-6 pb-4">
-                  <p className="text-text-secondary leading-relaxed">
+                <div className="px-4 sm:px-6 pb-4">
+                  <p className="text-text-secondary leading-relaxed text-sm sm:text-base">
                     {faq.answer}
                   </p>
                 </div>
@@ -400,20 +400,20 @@ export default function Home() {
       </section>
 
       {/* Contacto */}
-      <section className="max-w-3xl mx-auto px-6 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-semibold mb-6">
+      <section className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-4 sm:mb-6 px-2">
             ¿Dos minutos y lo vemos?
           </h2>
-          
+
           <button
             onClick={handleWhatsAppClick}
-            className="bg-emerald-500 hover:bg-emerald-600 text-black font-medium px-8 py-4 rounded-2xl text-lg shadow-lg transition-colors duration-200 mb-6"
+            className="bg-emerald-500 hover:bg-emerald-600 text-black font-medium px-6 sm:px-8 py-4 rounded-2xl text-base sm:text-lg shadow-lg transition-colors duration-200 mb-4 sm:mb-6 min-h-[56px] touch-manipulation"
           >
             Contactar por WhatsApp
           </button>
-          
-          <p className="text-text-secondary mb-8">
+
+          <p className="text-text-secondary mb-6 sm:mb-8 px-2 text-sm sm:text-base">
             o déjanos tus datos y te contactamos
           </p>
         </div>
@@ -425,31 +425,31 @@ export default function Home() {
               placeholder="Nombre *"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50 text-base min-h-[56px]"
               required
             />
           </div>
-          
+
           <div>
             <input
               type="email"
               placeholder="Email *"
               value={formData.email}
               onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50"
+              className="w-full px-4 py-4 bg-white/5 border border-white/10 rounded-lg text-text-primary placeholder-text-secondary focus:outline-none focus:border-emerald-500/50 text-base min-h-[56px]"
               required
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-black font-medium px-6 py-3 rounded-lg transition-colors duration-200"
+            className="w-full bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 text-black font-medium px-6 py-4 rounded-lg transition-colors duration-200 text-base min-h-[56px] touch-manipulation"
           >
             {isSubmitting ? 'Enviando...' : 'Enviar'}
           </button>
-          
-          <p className="text-xs text-text-secondary text-center">
+
+          <p className="text-xs text-text-secondary text-center px-2">
             Al enviar aceptas ser contactado para información comercial.
           </p>
         </form>
@@ -458,10 +458,10 @@ export default function Home() {
       {/* Botón WhatsApp Flotante */}
       <button
         onClick={handleWhatsAppClick}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 w-16 h-16 sm:w-14 sm:h-14 bg-green-500 hover:bg-green-600 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 group touch-manipulation"
         aria-label="Contactar por WhatsApp"
       >
-        <svg className="w-8 h-8 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+        <svg className="w-9 h-9 sm:w-8 sm:h-8 text-white group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
         </svg>
       </button>
@@ -577,6 +577,12 @@ export default function Home() {
                       ¿QUÉ ES GESTOR-IA?
                     </h4>
                     
+                    <div className="mt-6 text-center">
+                      <p className="text-text-primary font-medium">
+                        IA multi-rol con conexión a múltiples herramientas
+                      </p>
+                    </div>
+
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="bg-gradient-to-br from-blue-900/30 to-blue-800/20 rounded-xl p-4 border border-blue-500/20">
                         <h5 className="text-lg font-bold text-blue-400 mb-3 flex items-center">
@@ -607,12 +613,6 @@ export default function Home() {
                           Ofrece respuestas inmediatas a preguntas de clientes con posibilidad de conectar directamente a Email, WhatsApp...
                         </p>
                       </div>
-                    </div>
-
-                    <div className="mt-6 text-center">
-                      <p className="text-text-primary font-medium">
-                        IA multi-rol con conexión a múltiples herramientas
-                      </p>
                     </div>
                   </div>
 
@@ -841,7 +841,7 @@ export default function Home() {
                       </p>
                       <p className="text-base">
                         ◉ Sin compromiso de permanencia<br/>
-                        ◉ Reserva 100% gratuita y sin compromiso<br/>
+                        ◉ Reserva y prueba de forma 100% gratuita<br/>
                         ◉ Te contactamos el día del lanzamiento con toda la información
                       </p>
                       <p className="text-sm italic border-t border-white/10 pt-4 mt-4">
@@ -894,9 +894,9 @@ export default function Home() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-white/10 py-8">
-        <div className="max-w-4xl mx-auto px-6">
-          <p className="text-center">
+      <footer className="border-t border-white/10 py-6 sm:py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <p className="text-center text-sm sm:text-base">
             <span className="text-emerald-400">LoopTracer</span> <span className="text-text-secondary">— Claro y directo.</span>
           </p>
         </div>
