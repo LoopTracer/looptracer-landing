@@ -2,20 +2,31 @@ import './globals.css'
 import { Metadata, Viewport } from 'next'
 
 export const metadata: Metadata = {
-  title: 'LoopTracer — Automatización para gestorías sin cambiar herramientas',
-  description: 'Implementamos en días un asistente IA que busca en tus PDF/Excel, responde con cita y permisos por rol. Ahorra horas sin mover un dedo.',
+  title: 'LoopTracer - Automatización Empresarial e Integración de Sistemas | Software a Medida',
+  description: 'Conectamos tus herramientas, implementamos IA en procesos y desarrollamos software personalizado. Automatización sin cambiar tu forma de trabajo. Multiplica tu productividad.',
+  keywords: 'automatización empresarial, integración sistemas, software a medida, desarrollo saas, inteligencia artificial empresas, conectar herramientas, automatización procesos, software personalizado',
   openGraph: {
-    title: 'LoopTracer — Automatización para gestorías sin cambiar herramientas',
-    description: 'Implementamos en días un asistente IA que busca en tus PDF/Excel, responde con cita y permisos por rol. Ahorra horas sin mover un dedo.',
+    title: 'LoopTracer - Automatización e Integración de Sistemas para Empresas',
+    description: '⚡ Conectamos todas tus herramientas en un ecosistema unificado. Implementamos IA y desarrollamos software a medida. Sin cambiar tu forma de trabajo.',
     images: ['/og.jpg'],
     locale: 'es_ES',
     type: 'website',
+    siteName: 'LoopTracer',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'LoopTracer — Automatización para gestorías sin cambiar herramientas',
-    description: 'Implementamos en días un asistente IA que busca en tus PDF/Excel, responde con cita y permisos por rol. Ahorra horas sin mover un dedo.',
+    title: 'LoopTracer - Automatización Empresarial y Software a Medida',
+    description: '🔧 Integramos herramientas, implementamos IA y creamos software personalizado. Automatiza sin cambiar procesos. Multiplica productividad.',
     images: ['/og.jpg'],
+    creator: '@LoopTracer',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 }
 
