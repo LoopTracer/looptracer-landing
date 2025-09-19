@@ -223,7 +223,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-dark-bg text-text-primary font-inter">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-emerald-800 via-emerald-900 to-gray-900 shadow-2xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-emerald-800 shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-1">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -231,7 +231,7 @@ export default function Home() {
               <img
                 src="/logo.png"
                 alt="LoopTracer"
-                className="w-14 h-14 sm:w-16 sm:h-16 object-contain"
+                className="w-10 h-10 sm:w-12 sm:h-12 object-contain"
               />
               <span className="ml-3 text-lg sm:text-xl font-bold text-white tracking-wide">
                 LoopTracer
