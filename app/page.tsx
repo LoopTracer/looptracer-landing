@@ -223,7 +223,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-dark-bg text-text-primary font-inter">
       {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-emerald-800 shadow-2xl">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-1">
           <div className="flex items-center justify-between">
             {/* Logo */}
