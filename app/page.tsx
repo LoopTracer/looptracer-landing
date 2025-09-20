@@ -224,7 +224,7 @@ export default function Home() {
     <main className="min-h-screen bg-dark-bg text-text-primary font-inter">
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black shadow-2xl">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-1">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div className="flex items-center">
@@ -239,14 +239,14 @@ export default function Home() {
             </div>
 
             {/* Navigation Links */}
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#servicios" className="text-white/90 hover:text-white transition-colors text-base font-medium">
+            <div className="flex items-center space-x-3 sm:space-x-6">
+              <a href="#servicios" className="text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium">
                 Servicios
               </a>
-              <a href="#faq" className="text-white/90 hover:text-white transition-colors text-base font-medium">
+              <a href="#faq" className="text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium">
                 FAQ
               </a>
-              <a href="#contacto" className="text-white/90 hover:text-white transition-colors text-base font-medium">
+              <a href="#contacto" className="text-white/90 hover:text-white transition-colors text-sm sm:text-base font-medium">
                 Contacto
               </a>
             </div>
@@ -256,7 +256,7 @@ export default function Home() {
 
 
       {/* Hero Section Mejorado */}
-      <section className="pt-20 sm:pt-24 pb-12 sm:pb-16">
+      <section className="pt-24 sm:pt-28 pb-12 sm:pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center backdrop-blur-sm">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight tracking-wide text-white">
