@@ -225,7 +225,7 @@ export default function Home() {
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black shadow-2xl">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-0">
             {/* Logo */}
             <div className="flex items-center">
               <img
@@ -256,7 +256,7 @@ export default function Home() {
 
 
       {/* Hero Section Mejorado */}
-      <section className="pt-24 sm:pt-28 pb-12 sm:pb-16">
+      <section className="pt-28 sm:pt-28 pb-12 sm:pb-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 rounded-2xl sm:rounded-3xl p-6 sm:p-12 text-center backdrop-blur-sm">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight tracking-wide text-white">
